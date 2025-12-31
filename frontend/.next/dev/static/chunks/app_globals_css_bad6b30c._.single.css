@@ -2,6 +2,12 @@
 @layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
+      --tw-rotate-x: initial;
+      --tw-rotate-y: initial;
+      --tw-rotate-z: initial;
+      --tw-skew-x: initial;
+      --tw-skew-y: initial;
+      --tw-space-y-reverse: 0;
       --tw-border-style: solid;
       --tw-font-weight: initial;
       --tw-shadow: 0 0 #0000;
@@ -26,8 +32,16 @@
   :root, :host {
     --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --color-red-500: #fb2c36;
+    --color-black: #000;
     --color-white: #fff;
     --spacing: .25rem;
+    --text-sm: .875rem;
+    --text-sm--line-height: calc(1.25 / .875);
+    --text-base: 1rem;
+    --text-base--line-height: calc(1.5 / 1);
+    --text-lg: 1.125rem;
+    --text-lg--line-height: calc(1.75 / 1.125);
     --text-xl: 1.25rem;
     --text-xl--line-height: calc(1.75 / 1.25);
     --text-2xl: 1.5rem;
@@ -43,6 +57,12 @@
     --radius-xl: .75rem;
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
+  }
+
+  @supports (color: lab(0% 0 0)) {
+    :root, :host {
+      --color-red-500: lab(55.4814% 75.0732 48.8528);
+    }
   }
 }
 
@@ -295,12 +315,32 @@
 @layer components;
 
 @layer utilities {
+  .absolute {
+    position: absolute;
+  }
+
+  .fixed {
+    position: fixed;
+  }
+
   .relative {
     position: relative;
   }
 
   .mx-3 {
     margin-inline: calc(var(--spacing) * 3);
+  }
+
+  .mt-1 {
+    margin-top: calc(var(--spacing) * 1);
+  }
+
+  .mt-2 {
+    margin-top: calc(var(--spacing) * 2);
+  }
+
+  .mt-4 {
+    margin-top: calc(var(--spacing) * 4);
   }
 
   .flex {
@@ -313,6 +353,22 @@
 
   .h-50 {
     height: calc(var(--spacing) * 50);
+  }
+
+  .h-80\.25 {
+    height: calc(var(--spacing) * 80.25);
+  }
+
+  .h-112\.5 {
+    height: calc(var(--spacing) * 112.5);
+  }
+
+  .h-\[321\], .h-\[321px\] {
+    height: 321px;
+  }
+
+  .h-auto {
+    height: auto;
   }
 
   .h-full {
@@ -335,12 +391,32 @@
     width: 40%;
   }
 
+  .w-107 {
+    width: calc(var(--spacing) * 107);
+  }
+
+  .w-150 {
+    width: calc(var(--spacing) * 150);
+  }
+
+  .w-\[428px\] {
+    width: 428px;
+  }
+
+  .w-fit {
+    width: fit-content;
+  }
+
   .w-full {
     width: 100%;
   }
 
   .flex-1 {
     flex: 1;
+  }
+
+  .transform {
+    transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
   }
 
   .cursor-pointer {
@@ -367,6 +443,14 @@
     justify-content: center;
   }
 
+  .gap-1 {
+    gap: calc(var(--spacing) * 1);
+  }
+
+  .gap-2 {
+    gap: calc(var(--spacing) * 2);
+  }
+
   .gap-3 {
     gap: calc(var(--spacing) * 3);
   }
@@ -383,6 +467,12 @@
     gap: calc(var(--spacing) * 12);
   }
 
+  :where(.space-y-3 > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)));
+  }
+
   .rounded {
     border-radius: .25rem;
   }
@@ -391,9 +481,27 @@
     border-radius: var(--radius-xl);
   }
 
+  .rounded-t-xl {
+    border-top-left-radius: var(--radius-xl);
+    border-top-right-radius: var(--radius-xl);
+  }
+
+  .rounded-b-xl {
+    border-bottom-right-radius: var(--radius-xl);
+    border-bottom-left-radius: var(--radius-xl);
+  }
+
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
+  }
+
+  .border-\[\#9D9D9D\] {
+    border-color: #9d9d9d;
+  }
+
+  .border-\[\#\] {
+    border-color: # ;
   }
 
   .border-white {
@@ -408,6 +516,10 @@
     background-color: #ececec;
   }
 
+  .bg-\[\#EDEDED\] {
+    background-color: #ededed;
+  }
+
   .bg-white {
     background-color: var(--color-white);
   }
@@ -416,8 +528,24 @@
     background-image: url("/background.svg");
   }
 
+  .bg-cover {
+    background-size: cover;
+  }
+
+  .bg-no-repeat {
+    background-repeat: no-repeat;
+  }
+
   .object-cover {
     object-fit: cover;
+  }
+
+  .px-3 {
+    padding-inline: calc(var(--spacing) * 3);
+  }
+
+  .px-3\.5 {
+    padding-inline: calc(var(--spacing) * 3.5);
   }
 
   .px-4 {
@@ -432,6 +560,10 @@
     padding-inline: calc(var(--spacing) * 9);
   }
 
+  .py-1 {
+    padding-block: calc(var(--spacing) * 1);
+  }
+
   .py-4 {
     padding-block: calc(var(--spacing) * 4);
   }
@@ -442,6 +574,10 @@
 
   .pb-4 {
     padding-bottom: calc(var(--spacing) * 4);
+  }
+
+  .pb-5 {
+    padding-bottom: calc(var(--spacing) * 5);
   }
 
   .pl-5 {
@@ -465,6 +601,21 @@
   .text-6xl {
     font-size: var(--text-6xl);
     line-height: var(--tw-leading, var(--text-6xl--line-height));
+  }
+
+  .text-base {
+    font-size: var(--text-base);
+    line-height: var(--tw-leading, var(--text-base--line-height));
+  }
+
+  .text-lg {
+    font-size: var(--text-lg);
+    line-height: var(--tw-leading, var(--text-lg--line-height));
+  }
+
+  .text-sm {
+    font-size: var(--text-sm);
+    line-height: var(--tw-leading, var(--text-sm--line-height));
   }
 
   .text-xl {
@@ -500,8 +651,20 @@
     color: #1935a8;
   }
 
+  .text-\[\#707070\] {
+    color: #707070;
+  }
+
   .text-\[\#F1F1F1\] {
     color: #f1f1f1;
+  }
+
+  .text-black {
+    color: var(--color-black);
+  }
+
+  .text-red-500 {
+    color: var(--color-red-500);
   }
 
   .text-white {
@@ -533,6 +696,37 @@
     --tw-outline-style: none;
     outline-style: none;
   }
+}
+
+@property --tw-rotate-x {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-rotate-y {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-rotate-z {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-skew-x {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-skew-y {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-space-y-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
 }
 
 @property --tw-border-style {
