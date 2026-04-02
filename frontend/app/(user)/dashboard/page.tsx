@@ -20,9 +20,9 @@ export default function DashboardPage() {
   if (!isAuthenticated) return null;
 
   const menuItems = [
+    { icon: "📋", label: "Booking Saya", href: "/bookings", color: "bg-purple-50 hover:bg-purple-100" },
     { icon: "❤️", label: "Favorit Saya", href: "/favorites", color: "bg-red-50 hover:bg-red-100" },
     { icon: "🔍", label: "Cari Kost", href: "/search", color: "bg-blue-50 hover:bg-blue-100" },
-    { icon: "📋", label: "Riwayat Pencarian", href: "#", color: "bg-green-50 hover:bg-green-100", coming: true },
     { icon: "⭐", label: "Ulasan Saya", href: "#", color: "bg-yellow-50 hover:bg-yellow-100", coming: true },
   ];
 

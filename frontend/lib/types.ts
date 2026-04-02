@@ -97,3 +97,53 @@ export interface AuthResponse {
   refresh_token: string;
   user: User;
 }
+
+export type BookingStatus = 'pending' | 'approved' | 'rejected' | 'cancelled' | 'expired' | 'completed';
+
+export type PaymentStatus = 'unpaid' | 'partial' | 'paid' | 'refunded';
+
+export interface Booking {
+  id: number;
+  kos_id: number;
+  tenant_name: string;
+  tenant_email: string;
+  tenant_phone: string;
+  tenant_notes?: string;
+  check_in_date: string;
+  duration_months: number;
+  status: BookingStatus;
+  rejection_reason?: string;
+  monthly_price: number;
+  total_price: number;
+  deposit_amount: number;
+  payment_status: PaymentStatus;
+  expires_at: string;
+  created_at: string;
+  kos?: Kos;
+}
+
+export interface CreateBookingRequest {
+  kos_id: number;
+  tenant_name: string;
+  tenant_email: string;
+  tenant_phone: string;
+  tenant_notes?: string;
+  check_in_date: string;
+  duration_months: number;
+  monthly_price: number;
+}
+
+export interface Notification {
+  id: number;
+  user_id: number;
+  type: 'booking_request' | 'booking_approved' | 'booking_rejected' | 'booking_cancelled' | 'booking_expired' | 'reminder';
+  title: string;
+  message: string;
+  booking_id?: number;
+  kos_id?: number;
+  is_read: boolean;
+  read_at?: string;
+  created_at: string;
+  kos?: Kos;
+  booking?: Booking;
+}

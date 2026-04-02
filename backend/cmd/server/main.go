@@ -11,6 +11,7 @@ import (
 	"kose-backend/internal/handlers"
 	"kose-backend/internal/middleware"
 	"kose-backend/internal/models"
+	"kose-backend/internal/repositories"
 	"kose-backend/internal/services"
 )
 
@@ -30,6 +31,9 @@ func main() {
 		&models.Review{},
 		&models.Favorite{},
 		&models.Location{},
+		&models.Booking{},
+		&models.BookingHistory{},
+		&models.Notification{},
 	); err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
@@ -42,11 +46,19 @@ func main() {
 	favoriteService := services.NewFavoriteService(db)
 	facilityService := services.NewFacilityService(db)
 
+	bookingRepo := repositories.NewBookingRepository(db)
+	notificationRepo := repositories.NewNotificationRepository(db)
+	bookingService := services.NewBookingService(bookingRepo, notificationRepo)
+	notificationService := services.NewNotificationService(notificationRepo)
+
 	authHandler := handlers.NewAuthHandler(userService, cfg)
 	kosHandler := handlers.NewKosHandler(kosService)
 	reviewHandler := handlers.NewReviewHandler(reviewService, kosService)
 	favoriteHandler := handlers.NewFavoriteHandler(favoriteService)
 	adminHandler := handlers.NewAdminHandler(kosService, userService, facilityService)
+	bookingHandler := handlers.NewBookingHandler(bookingService)
+	ownerBookingHandler := handlers.NewOwnerBookingHandler(bookingService)
+	notificationHandler := handlers.NewNotificationHandler(notificationService)
 
 	r := gin.Default()
 	r.Use(middleware.CORSMiddleware(cfg))
@@ -86,6 +98,35 @@ func main() {
 			favorites.GET("", favoriteHandler.GetAll)
 			favorites.POST("/:id", favoriteHandler.Add)
 			favorites.DELETE("/:id", favoriteHandler.Remove)
+		}
+
+		bookings := api.Group("/bookings")
+		bookings.Use(middleware.AuthMiddleware(cfg))
+		{
+			bookings.POST("", bookingHandler.Create)
+			bookings.GET("", bookingHandler.GetAll)
+			bookings.GET("/:id", bookingHandler.GetByID)
+			bookings.PUT("/:id/cancel", bookingHandler.Cancel)
+		}
+
+		owner := api.Group("/owner")
+		owner.Use(middleware.AuthMiddleware(cfg), middleware.OwnerOrAdminMiddleware())
+		{
+			owner.GET("/bookings", ownerBookingHandler.GetAll)
+			owner.GET("/bookings/pending", ownerBookingHandler.GetPending)
+			owner.GET("/bookings/:id", ownerBookingHandler.GetByID)
+			owner.PUT("/bookings/:id/approve", ownerBookingHandler.Approve)
+			owner.PUT("/bookings/:id/reject", ownerBookingHandler.Reject)
+		}
+
+		notifications := api.Group("/notifications")
+		notifications.Use(middleware.AuthMiddleware(cfg))
+		{
+			notifications.GET("", notificationHandler.GetAll)
+			notifications.GET("/unread/count", notificationHandler.GetUnreadCount)
+			notifications.PUT("/:id/read", notificationHandler.MarkAsRead)
+			notifications.PUT("/read-all", notificationHandler.MarkAllAsRead)
+			notifications.DELETE("/:id", notificationHandler.Delete)
 		}
 
 		admin := api.Group("/admin")

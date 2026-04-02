@@ -62,6 +62,7 @@ type Kos struct {
 	ReviewCount    int            `gorm:"default:0" json:"review_count"`
 	Source         SourceType     `gorm:"type:source_type;default:manual" json:"source"`
 	CreatedBy      *uint          `json:"created_by"`
+	OwnerID        *uint          `json:"owner_id"`
 	LocationID     *uint          `json:"location_id"`
 	CreatedAt      time.Time      `json:"created_at"`
 	UpdatedAt      time.Time      `json:"updated_at"`
@@ -72,6 +73,7 @@ type Kos struct {
 	Facilities []Facility `gorm:"many2many:kos_facilities;" json:"facilities,omitempty"`
 	Images     []KosImage `gorm:"foreignKey:KosID" json:"images,omitempty"`
 	Reviews    []Review   `gorm:"foreignKey:KosID" json:"reviews,omitempty"`
+	Owner      *User      `gorm:"foreignKey:OwnerID" json:"owner,omitempty"`
 }
 
 // Facility model

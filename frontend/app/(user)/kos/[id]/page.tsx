@@ -1,17 +1,19 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/api';
 import { Kos, Review, Facility } from '@/lib/types';
 import { useAuthStore } from '@/lib/store';
 import { useChatStore } from '@/lib/chat-store';
-import { Heart, Star, MapPin, MessageCircle, CheckCircle, Share2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Heart, Star, MapPin, MessageCircle, CheckCircle, Share2, ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 import Link from 'next/link';
+import BookingModal from '@/components/BookingModal';
 
 export default function KosDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
@@ -21,6 +23,7 @@ export default function KosDetailPage() {
   const [newReview, setNewReview] = useState({ rating: 5, comment: '' });
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isFavorited, setIsFavorited] = useState(false);
+  const [showBookingModal, setShowBookingModal] = useState(false);
 
   const { data: kos, isLoading: kosLoading } = useQuery({
     queryKey: ['kos', params.id],
@@ -344,8 +347,26 @@ export default function KosDetailPage() {
               
               <div className="space-y-3">
                 <button 
+                  onClick={() => {
+                    if (!isAuthenticated) {
+                      router.push('/login');
+                      return;
+                    }
+                    if (kos.available_rooms <= 0) {
+                      alert('Maaf, kamar tidak tersedia');
+                      return;
+                    }
+                    setShowBookingModal(true);
+                  }}
+                  disabled={kos.available_rooms <= 0}
+                  className="w-full bg-gradient-to-r from-[#011E55] to-[#0a2d6e] text-white py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-[#011E55]/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Calendar className="w-5 h-5" />
+                  {kos.available_rooms <= 0 ? 'Kamar Penuh' : 'Booking Sekarang'}
+                </button>
+                <button 
                   onClick={() => openChat(kos.id, kos.name)}
-                  className="w-full bg-gradient-to-r from-[#011E55] to-[#0a2d6e] text-white py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-[#011E55]/25 transition-all"
+                  className="w-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all"
                 >
                   <MessageCircle className="w-5 h-5" />
                   Chat Pemilik
@@ -365,6 +386,14 @@ export default function KosDetailPage() {
           </div>
         </div>
       </div>
+
+      <BookingModal
+        isOpen={showBookingModal}
+        onClose={() => setShowBookingModal(false)}
+        kosId={kos.id}
+        kosName={kos.name}
+        price={kos.price}
+      />
     </div>
   );
 }
