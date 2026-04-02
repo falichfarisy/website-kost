@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { useAuthStore } from '@/lib/store';
 import { ThemeToggle } from './ThemeToggle';
 import { useRouter } from 'next/navigation';
-import { LogOut, User, Menu, X, Building2 } from 'lucide-react';
+import { LogOut, User, Menu, X, Building2, Calendar } from 'lucide-react';
 import { useState } from 'react';
+import NotificationBell from './NotificationBell';
 
 export function Header() {
   const { user, isAuthenticated, logout } = useAuthStore();
@@ -17,6 +18,8 @@ export function Header() {
     router.push('/');
     setMobileMenuOpen(false);
   };
+
+  const isOwner = user?.role === 'admin' || user?.role === 'owner';
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
@@ -48,6 +51,23 @@ export function Header() {
             
             {isAuthenticated && user ? (
               <div className="flex items-center gap-2">
+                {isOwner && (
+                  <Link 
+                    href="/owner"
+                    className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-[#011E55]/10 dark:bg-blue-900/30 text-[#011E55] dark:text-blue-400 hover:bg-[#011E55]/20 transition-all"
+                  >
+                    <Building2 className="w-4 h-4" />
+                    <span className="text-sm font-medium">Owner</span>
+                  </Link>
+                )}
+                <Link 
+                  href="/bookings"
+                  className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-all"
+                  title="Booking Saya"
+                >
+                  <Calendar className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                </Link>
+                <NotificationBell />
                 <Link 
                   href="/dashboard"
                   className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
