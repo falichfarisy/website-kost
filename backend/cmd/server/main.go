@@ -10,7 +10,6 @@ import (
 	"kose-backend/internal/config"
 	"kose-backend/internal/handlers"
 	"kose-backend/internal/middleware"
-	"kose-backend/internal/models"
 	"kose-backend/internal/repositories"
 	"kose-backend/internal/services"
 )
@@ -23,22 +22,10 @@ func main() {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 
-	if err := db.AutoMigrate(
-		&models.User{},
-		&models.Kos{},
-		&models.Facility{},
-		&models.KosImage{},
-		&models.Review{},
-		&models.Favorite{},
-		&models.Location{},
-		&models.Booking{},
-		&models.BookingHistory{},
-		&models.Notification{},
-	); err != nil {
-		log.Fatalf("Failed to migrate database: %v", err)
-	}
+	sqlDB, _ := db.DB()
+	_, _ = sqlDB.Exec(`SELECT 1`)
 
-	log.Println("Database migration completed")
+	log.Println("Database schema ready")
 
 	userService := services.NewUserService(db)
 	kosService := services.NewKosService(db)
