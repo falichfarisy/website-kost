@@ -43,20 +43,78 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex">
-      <div className="hidden lg:flex lg:w-1/2 bg-[#011E55] flex-col justify-center items-center p-12">
-        <h1 className="text-5xl font-bold text-white mb-6">Selamat Datang di KOSE</h1>
-        <p className="text-xl text-white/80 text-center max-w-md">
-          Temukan kost terbaikmu dengan mudah. Masuk sekarang untuk mengakses semua fitur.
-        </p>
-        <div className="mt-12 flex gap-8">
-          {['🔍', '📍', '⭐'].map((icon, i) => (
-            <div key={i} className="text-white/80 text-center">
-              <div className="text-3xl mb-2">{icon}</div>
-              <div className="text-sm">
-                {['Pencarian Cerdas', 'Lokasi Akurat', 'Ulasan Terpercaya'][i]}
-              </div>
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-[#011E55] via-[#0a2d6e] to-[#1a3a7a]">
+        <div className="absolute inset-0">
+          <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-white/5 blur-3xl animate-pulse" />
+          <div className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full bg-[#011E55]/30 blur-3xl" />
+          
+          <svg className="absolute top-20 left-10 w-32 h-32 text-white/10 animate-float" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+          </svg>
+          <svg className="absolute bottom-32 right-16 w-24 h-24 text-white/10 animate-float-delayed" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 3L4 9v12h16V9l-8-6zm0 2.5L18 10v9H6v-9l6-4.5z"/>
+          </svg>
+          
+          <div className="absolute inset-0 opacity-5">
+            <div className="w-full h-full" style={{
+              backgroundImage: 'linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)',
+              backgroundSize: '50px 50px'
+            }} />
+          </div>
+        </div>
+
+        <div className="relative z-10 flex flex-col justify-center items-center w-full p-12 text-center">
+          <div className="mb-8">
+            <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 mx-auto border border-white/20">
+              <svg className="w-10 h-10 text-white" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+              </svg>
             </div>
-          ))}
+          </div>
+
+          <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+            Selamat Datang di <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/70">KOSE</span>
+          </h1>
+          <p className="text-lg text-white/80 text-center max-w-md mb-10 leading-relaxed">
+            Temukan kost impianmu dengan mudah. Platform pencarian kost terpercaya untuk mahasiswa dan pekerja.
+          </p>
+
+          <div className="grid grid-cols-3 gap-4 w-full max-w-lg">
+            {[
+              { icon: '🔍', title: 'Pencarian Cerdas', desc: 'Filter sesuai kebutuhan' },
+              { icon: '📍', title: 'Lokasi Akurat', desc: 'Peta interaktif' },
+              { icon: '⭐', title: 'Ulasan Asli', desc: 'Dari penghuni nyata' },
+            ].map((item, i) => (
+              <div key={i} className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:bg-white/15 transition-all duration-300 hover:-translate-y-1">
+                <div className="text-2xl mb-2">{item.icon}</div>
+                <h3 className="text-white font-semibold text-sm">{item.title}</h3>
+                <p className="text-white/60 text-xs mt-1">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 flex items-center gap-8">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-white">1000+</div>
+              <div className="text-white/60 text-sm">Kost Tersedia</div>
+            </div>
+            <div className="w-px h-10 bg-white/20" />
+            <div className="text-center">
+              <div className="text-2xl font-bold text-white">5000+</div>
+              <div className="text-white/60 text-sm">Pengguna Aktif</div>
+            </div>
+            <div className="w-px h-10 bg-white/20" />
+            <div className="text-center">
+              <div className="text-2xl font-bold text-white">4.8</div>
+              <div className="text-white/60 text-sm">Rating Rata-rata</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H0Z" fill="white" fillOpacity="0.05"/>
+          </svg>
         </div>
       </div>
 
