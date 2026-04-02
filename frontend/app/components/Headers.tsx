@@ -10,10 +10,10 @@ export default function Headers() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { label: "Tentang Kami", href: "#" },
-    { label: "Pusat Bantuan", href: "#" },
-    { label: "Hubungi Kami", href: "#" },
-    { label: "Artikel", href: "#" },
+    { label: "Tentang Kami", href: "/about" },
+    { label: "Pusat Bantuan", href: "/help" },
+    { label: "Hubungi Kami", href: "/contact" },
+    { label: "Artikel", href: "/articles" },
   ];
 
   const handleSearch = (e: React.FormEvent) => {
