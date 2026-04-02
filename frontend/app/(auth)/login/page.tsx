@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
+import { Home, Search, MapPin, Star, Building2, AlertCircle, Mail, Lock } from 'lucide-react';
 import api from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
 
@@ -66,9 +67,7 @@ export default function LoginPage() {
         <div className="relative z-10 flex flex-col justify-center items-center w-full p-12 text-center">
           <div className="mb-8">
             <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 mx-auto border border-white/20">
-              <svg className="w-10 h-10 text-white" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-              </svg>
+              <Building2 className="w-10 h-10 text-white" />
             </div>
           </div>
 
@@ -81,12 +80,14 @@ export default function LoginPage() {
 
           <div className="grid grid-cols-3 gap-4 w-full max-w-lg">
             {[
-              { icon: '🔍', title: 'Pencarian Cerdas', desc: 'Filter sesuai kebutuhan' },
-              { icon: '📍', title: 'Lokasi Akurat', desc: 'Peta interaktif' },
-              { icon: '⭐', title: 'Ulasan Asli', desc: 'Dari penghuni nyata' },
+              { icon: Search, title: 'Pencarian Cerdas', desc: 'Filter sesuai kebutuhan' },
+              { icon: MapPin, title: 'Lokasi Akurat', desc: 'Peta interaktif' },
+              { icon: Star, title: 'Ulasan Asli', desc: 'Dari penghuni nyata' },
             ].map((item, i) => (
               <div key={i} className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:bg-white/15 transition-all duration-300 hover:-translate-y-1">
-                <div className="text-2xl mb-2">{item.icon}</div>
+                <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center mx-auto mb-3">
+                  <item.icon className="w-5 h-5 text-white" />
+                </div>
                 <h3 className="text-white font-semibold text-sm">{item.title}</h3>
                 <p className="text-white/60 text-xs mt-1">{item.desc}</p>
               </div>
@@ -128,9 +129,7 @@ export default function LoginPage() {
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-2">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-              </svg>
+              <AlertCircle className="w-5 h-5" />
               {error}
             </div>
           )}
@@ -139,9 +138,7 @@ export default function LoginPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
               <div className="relative">
-                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                </svg>
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   {...register('email')}
                   type="email"
@@ -155,9 +152,7 @@ export default function LoginPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
               <div className="relative">
-                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   {...register('password')}
                   type="password"

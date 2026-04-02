@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
+import { UserPlus, Home, Heart, FileText, Bell, ShieldCheck, AlertCircle, User, Mail, Phone, Lock, CheckCircle } from 'lucide-react';
 import api from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
 
@@ -83,9 +84,7 @@ export default function RegisterPage() {
         <div className="relative z-10 flex flex-col justify-center items-center w-full p-12 text-center">
           <div className="mb-8">
             <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 mx-auto border border-white/20">
-              <svg className="w-10 h-10 text-white" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-              </svg>
+              <UserPlus className="w-10 h-10 text-white" />
             </div>
           </div>
 
@@ -98,13 +97,15 @@ export default function RegisterPage() {
 
           <div className="grid grid-cols-1 gap-4 w-full max-w-sm">
             {[
-              { icon: '🏠', title: 'Akses ke 1000+ Kost', desc: 'Pilihan terlengkap di kotamu' },
-              { icon: '❤️', title: 'Simpan Favorit', desc: 'Tandai kos yang kamu suka' },
-              { icon: '📝', title: 'Tulis Ulasan', desc: 'Bantu orang lain memilih' },
-              { icon: '🔔', title: 'Notifikasi Promo', desc: 'Dapat info diskon terbaru' },
+              { icon: Home, title: 'Akses ke 1000+ Kost', desc: 'Pilihan terlengkap di kotamu' },
+              { icon: Heart, title: 'Simpan Favorit', desc: 'Tandai kos yang kamu suka' },
+              { icon: FileText, title: 'Tulis Ulasan', desc: 'Bantu orang lain memilih' },
+              { icon: Bell, title: 'Notifikasi Promo', desc: 'Dapat info diskon terbaru' },
             ].map((item, i) => (
               <div key={i} className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:bg-white/15 transition-all duration-300 flex items-center gap-4 text-left">
-                <span className="text-3xl">{item.icon}</span>
+                <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                  <item.icon className="w-5 h-5 text-white" />
+                </div>
                 <div>
                   <h3 className="text-white font-semibold">{item.title}</h3>
                   <p className="text-white/60 text-sm">{item.desc}</p>
@@ -115,18 +116,21 @@ export default function RegisterPage() {
 
           <div className="mt-10 flex items-center gap-8">
             <div className="text-center">
+              <CheckCircle className="w-6 h-6 text-white/80 mx-auto mb-2" />
               <div className="text-2xl font-bold text-white">100%</div>
               <div className="text-white/60 text-sm">Gratis</div>
             </div>
             <div className="w-px h-10 bg-white/20" />
             <div className="text-center">
+              <Bell className="w-6 h-6 text-white/80 mx-auto mb-2" />
               <div className="text-2xl font-bold text-white">24/7</div>
               <div className="text-white/60 text-sm">Support</div>
             </div>
             <div className="w-px h-10 bg-white/20" />
             <div className="text-center">
+              <ShieldCheck className="w-6 h-6 text-white/80 mx-auto mb-2" />
               <div className="text-2xl font-bold text-white">100%</div>
-              <div className="text-white/60 text-sm">Aman & Terpercaya</div>
+              <div className="text-white/60 text-sm">Aman</div>
             </div>
           </div>
         </div>
@@ -148,9 +152,7 @@ export default function RegisterPage() {
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-2">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-              </svg>
+              <AlertCircle className="w-5 h-5" />
               {error}
             </div>
           )}
@@ -159,9 +161,7 @@ export default function RegisterPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
               <div className="relative">
-                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   {...register('name')}
                   type="text"
@@ -175,9 +175,7 @@ export default function RegisterPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
               <div className="relative">
-                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                </svg>
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   {...register('email')}
                   type="email"
@@ -191,9 +189,7 @@ export default function RegisterPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">No. HP (opsional)</label>
               <div className="relative">
-                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
+                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   {...register('phone')}
                   type="tel"
@@ -206,9 +202,7 @@ export default function RegisterPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
               <div className="relative">
-                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   {...register('password')}
                   type="password"
@@ -222,9 +216,7 @@ export default function RegisterPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Konfirmasi Password</label>
               <div className="relative">
-                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
+                <ShieldCheck className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   {...register('confirmPassword')}
                   type="password"
