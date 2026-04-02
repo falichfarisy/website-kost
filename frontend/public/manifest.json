@@ -1,0 +1,38 @@
+{
+  "name": "KOSE - Platform Pencarian Kost",
+  "short_name": "KOSE",
+  "description": "Temukan kost terbaik untuk kebutuhanmu",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#011E55",
+  "theme_color": "#011E55",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["lifestyle", "shopping"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Cari Kost",
+      "url": "/search",
+      "description": "Cari kost terbaik"
+    },
+    {
+      "name": "Masuk",
+      "url": "/login",
+      "description": "Masuk ke akun kamu"
+    }
+  ]
+}
