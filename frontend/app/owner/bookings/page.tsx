@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
 import { Booking, BookingStatus } from '@/lib/types';
 import { Calendar, MapPin, Clock, CheckCircle, XCircle, AlertCircle, CheckCheck, X, User, Phone, Mail } from 'lucide-react';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 
 const statusConfig: Record<BookingStatus, { label: string; color: string; bg: string; icon: any }> = {
   pending: { label: 'Menunggu', color: 'text-yellow-600', bg: 'bg-yellow-100 dark:bg-yellow-900/30', icon: Clock },
@@ -17,6 +17,33 @@ const statusConfig: Record<BookingStatus, { label: string; color: string; bg: st
 };
 
 export default function OwnerBookingsPage() {
+  return (
+    <Suspense fallback={<BookingsLoading />}>
+      <BookingsContent />
+    </Suspense>
+  );
+}
+
+function BookingsLoading() {
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="bg-[#011E55] text-white py-8 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-2xl font-bold">Manajemen Booking</h1>
+        </div>
+      </div>
+      <div className="max-w-6xl mx-auto p-4">
+        <div className="animate-pulse space-y-4">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="h-24 bg-gray-200 dark:bg-gray-800 rounded-lg" />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BookingsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const statusFilter = searchParams.get('status') || '';
