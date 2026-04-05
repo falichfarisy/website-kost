@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { Booking } from '@/lib/types';
-import { Calendar, Clock, CheckCircle, ClockCounterClockwise, ArrowRight, LayoutDashboard, CalendarCheck } from 'lucide-react';
+import { Calendar, Clock, CheckCircle, ArrowRight, LayoutDashboard, CalendarCheck } from 'lucide-react';
 
 export default function OwnerDashboardPage() {
   const router = useRouter();
