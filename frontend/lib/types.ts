@@ -3,7 +3,7 @@ export interface User {
   email: string;
   name: string;
   phone?: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'owner';
 }
 
 export interface Kos {
