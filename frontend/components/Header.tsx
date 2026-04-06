@@ -34,14 +34,17 @@ export function Header() {
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-6">
-            <Link href="/search" className="text-gray-600 dark:text-gray-300 hover:text-[#011E55] dark:hover:text-white transition-colors font-medium">
+          <nav className="hidden md:flex items-center gap-1">
+            <Link href="/search" className="px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-[#011E55] dark:hover:text-white transition-colors font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
               Cari Kost
             </Link>
-            <Link href="/articles" className="text-gray-600 dark:text-gray-300 hover:text-[#011E55] dark:hover:text-white transition-colors font-medium">
+            <Link href="/about" className="px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-[#011E55] dark:hover:text-white transition-colors font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+              Tentang Kami
+            </Link>
+            <Link href="/articles" className="px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-[#011E55] dark:hover:text-white transition-colors font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
               Artikel
             </Link>
-            <Link href="/help" className="text-gray-600 dark:text-gray-300 hover:text-[#011E55] dark:hover:text-white transition-colors font-medium">
+            <Link href="/help" className="px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-[#011E55] dark:hover:text-white transition-colors font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
               Bantuan
             </Link>
           </nav>
@@ -118,6 +121,13 @@ export function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Cari Kost
+              </Link>
+              <Link 
+                href="/about" 
+                className="px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Tentang Kami
               </Link>
               <Link 
                 href="/articles" 
