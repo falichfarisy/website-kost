@@ -13,9 +13,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKENS }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
-          working-directory: ./frontend
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Pull Vercel Environment
+        run: vercel pull --yes --verify --token=${{ secrets.VERCEL_TOKENS }} --org=${{ secrets.VERCEL_ORG_ID }} --project=${{ secrets.VERCEL_PROJECT_ID }} --environment=Preview
+
+      - name: Build Project
+        run: |
+          cd frontend
+          vercel build --token=${{ secrets.VERCEL_TOKENS }} --prod
+
+      - name: Deploy to Production
+        run: |
+          vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKENS }} --prod
