@@ -18,4 +18,4 @@ jobs:
 
       - name: Deploy to Production
         working-directory: ./frontend
-        run: vercel --prod --token=${{ secrets.VERCEL_TOKENS }}
+        run: vercel --prod --yes --token=${{ secrets.VERCEL_TOKENS }}
