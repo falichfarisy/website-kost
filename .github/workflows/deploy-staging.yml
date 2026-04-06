@@ -16,14 +16,6 @@ jobs:
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
 
-      - name: Pull Vercel Environment
-        run: vercel pull --yes --token=${{ secrets.VERCEL_TOKENS }} --project=${{ secrets.VERCEL_PROJECT_ID }} --environment=Preview
-
-      - name: Build Project
-        run: |
-          cd frontend
-          vercel build --token=${{ secrets.VERCEL_TOKENS }}
-
       - name: Deploy to Staging
-        run: |
-          vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKENS }}
+        working-directory: ./frontend
+        run: vercel --token=${{ secrets.VERCEL_TOKENS }}
