@@ -17,7 +17,7 @@ jobs:
         run: npm install -g vercel@latest
 
       - name: Pull Vercel Environment
-        run: vercel pull --yes --verify --token=${{ secrets.VERCEL_TOKENS }} --org=${{ secrets.VERCEL_ORG_ID }} --project=${{ secrets.VERCEL_PROJECT_ID }} --environment=Preview
+        run: vercel pull --yes --token=${{ secrets.VERCEL_TOKENS }} --org=${{ secrets.VERCEL_ORG_ID }} --project=${{ secrets.VERCEL_PROJECT_ID }} --environment=Preview
 
       - name: Build Project
         run: |
