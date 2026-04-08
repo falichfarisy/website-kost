@@ -22,7 +22,7 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      user: { id: 1, email: 'test@kose.com', name: 'Test User', role: 'user' },
+      user: { id: 1, email: 'admin@kose.com', name: 'Admin User', role: 'admin' },
       accessToken: 'dummy-token',
       refreshToken: 'dummy-refresh-token',
       isAuthenticated: true,
@@ -35,6 +35,12 @@ export const useAuthStore = create<AuthState>()(
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         set({ user: null, accessToken: null, refreshToken: null, isAuthenticated: false });
+      },
+      setRole: (role: 'user' | 'admin' | 'owner') => {
+        const roleNames = { user: 'Test User', admin: 'Admin User', owner: 'Owner User' };
+        const roleEmails = { user: 'test@kose.com', admin: 'admin@kose.com', owner: 'owner@kose.com' };
+        const newUser = { id: 1, email: roleEmails[role], name: roleNames[role], role };
+        set({ user: newUser });
       },
     }),
     {
