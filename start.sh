@@ -30,3 +30,5 @@ echo "Press Ctrl+C to stop both services"
 
 # Wait for both processes
 wait
+
+#testing config new email
