@@ -10,9 +10,10 @@ import { Home, Search, MapPin, Star, Building2, AlertCircle, Mail, Lock } from '
 import api from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
 
+// Validation disabled for development
 const loginSchema = z.object({
-  email: z.string().email('Email tidak valid'),
-  password: z.string().min(6, 'Password minimal 6 karakter'),
+  email: z.string(),
+  password: z.string(),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
@@ -24,7 +25,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>({
-    resolver: zodResolver(loginSchema),
+    // resolver: zodResolver(loginSchema), // Validation disabled
   });
 
   const onSubmit = async (data: LoginForm) => {
