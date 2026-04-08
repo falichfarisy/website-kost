@@ -16,12 +16,13 @@ export interface Kos {
   kos_type: 'putra' | 'putri' | 'campur';
   price: number;
   price_type: string;
-  area?: number;
+  area?: number | string;
   capacity: number;
   available_rooms: number;
   rating: number;
-  review_count: number;
-  source: 'manual' | 'scraped';
+  review_count?: number;
+  reviews_count?: number;
+  source?: 'manual' | 'scraped';
   location_id?: number;
   location?: Location;
   facilities?: Facility[];
@@ -32,6 +33,15 @@ export interface Facility {
   id: number;
   name: string;
   icon?: string;
+  category?: string;
+}
+
+export interface Location {
+  id?: number;
+  province?: string;
+  city?: string;
+  district: string;
+  subdistrict?: string;
 }
 
 export interface KosImage {
@@ -42,11 +52,11 @@ export interface KosImage {
 }
 
 export interface Location {
-  id: number;
-  province: string;
-  city: string;
+  id?: number;
+  province?: string;
+  city?: string;
   district: string;
-  subdistrict: string;
+  subdistrict?: string;
 }
 
 export interface Review {

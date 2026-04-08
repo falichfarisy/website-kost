@@ -9,9 +9,10 @@ import { useState } from 'react';
 import NotificationBell from './NotificationBell';
 
 export function Header() {
-  const { user, isAuthenticated, logout } = useAuthStore();
+  const { user, isAuthenticated, logout, setRole } = useAuthStore();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showRoleMenu, setShowRoleMenu] = useState(false);
 
   const handleLogout = () => {
     logout();

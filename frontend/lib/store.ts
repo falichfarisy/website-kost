@@ -17,6 +17,7 @@ interface AuthState {
   isAuthenticated: boolean;
   setAuth: (user: User, accessToken: string, refreshToken: string) => void;
   logout: () => void;
+  setRole: (role: 'user' | 'admin' | 'owner') => void;
 }
 
 export const useAuthStore = create<AuthState>()(

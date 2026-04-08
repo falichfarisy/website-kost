@@ -1,112 +1,149 @@
 'use client';
 
-import Link from 'next/link';
 import { useAuthStore } from '@/lib/store';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { 
+  Home, Search, BookOpen, Heart, Star, User, MapPin, Clock,
+  ArrowRight, Star as StarIcon
+} from 'lucide-react';
 
 export default function DashboardPage() {
-  const { user, logout } = useAuthStore();
+  const { user, setRole } = useAuthStore();
+  const router = useRouter();
 
   const menuItems = [
-    { icon: "📋", label: "Booking Saya", href: "/bookings", color: "bg-purple-50 hover:bg-purple-100" },
-    { icon: "❤️", label: "Favorit Saya", href: "/favorites", color: "bg-red-50 hover:bg-red-100" },
-    { icon: "🔍", label: "Cari Kost", href: "/search", color: "bg-blue-50 hover:bg-blue-100" },
-    { icon: "⭐", label: "Ulasan Saya", href: "#", color: "bg-yellow-50 hover:bg-yellow-100", coming: true },
+    { 
+      icon: BookOpen, 
+      label: 'Booking Saya', 
+      href: '/bookings', 
+      color: 'from-purple-500 to-purple-600',
+      desc: 'Lihat riwayat booking'
+    },
+    { 
+      icon: Heart, 
+      label: 'Favorit Saya', 
+      href: '/favorites', 
+      color: 'from-red-500 to-red-600',
+      desc: 'Kost yang disimpan'
+    },
+    { 
+      icon: Search, 
+      label: 'Cari Kost', 
+      href: '/search', 
+      color: 'from-blue-500 to-blue-600',
+      desc: 'Temukan kost idaman'
+    },
+    { 
+      icon: StarIcon, 
+      label: 'Ulasan Saya', 
+      href: '#', 
+      color: 'from-yellow-500 to-yellow-600',
+      desc: 'Beri rating kost',
+      disabled: true
+    },
+  ];
+
+  const recentKos = [
+    { name: 'Kost Melati Premium', location: 'Kotabaru', price: 1500000, type: 'putra' },
+    { name: 'Kost Orchid Indah', location: 'Banguntapan', price: 1200000, type: 'putri' },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-r from-[#011E55] to-[#0a2d6e] text-white py-12 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-4">
-            <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center text-3xl font-bold">
-              {user?.name?.charAt(0).toUpperCase()}
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold">Halo, {user?.name}! 👋</h1>
-              <p className="text-white/80">Selamat datang di dashboard KOSE</p>
-            </div>
+    <div className="space-y-6">
+      <div className="bg-gradient-to-r from-[#011E55] to-[#0a2d6e] rounded-2xl p-8 text-white">
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+            <User className="w-8 h-8" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold">Halo, {user?.name}!</h1>
+            <p className="text-white/80">Selamat datang di dashboard KOSE</p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto p-4 md:p-8 -mt-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-2xl shadow-sm p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">Informasi Akun</h2>
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Nama</p>
-                  <p className="font-medium">{user?.name}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Email</p>
-                  <p className="font-medium">{user?.email}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-green-100 text-green-600 rounded-lg flex items-center justify-center">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Status</p>
-                  <p className="font-medium text-green-600">Aktif</p>
-                </div>
-              </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {menuItems.map((item, i) => (
+          <Link
+            key={i}
+            href={item.disabled ? '#' : item.href}
+            className={`bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all ${
+              item.disabled ? 'opacity-60 cursor-not-allowed' : 'hover:-translate-y-1'
+            }`}
+          >
+            <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-4`}>
+              <item.icon className="w-6 h-6 text-white" />
             </div>
+            <h3 className="font-semibold text-gray-900 dark:text-white">{item.label}</h3>
+            <p className="text-sm text-gray-500 mt-1">{item.desc}</p>
+          </Link>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">Kost Terbaru</h2>
+            <Link href="/search" className="text-[#011E55] text-sm font-medium flex items-center gap-1">
+              Lihat semua <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
+          <div className="space-y-4">
+            {recentKos.map((kos, i) => (
+              <Link
+                key={i}
+                href="/search"
+                className="flex items-center gap-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                <div className="w-16 h-16 rounded-lg bg-[#011E55]/10 flex items-center justify-center">
+                  <Home className="w-8 h-8 text-[#011E55]" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900 dark:text-white">{kos.name}</h3>
+                  <p className="text-sm text-gray-500 flex items-center gap-1">
+                    <MapPin className="w-3 h-3" /> {kos.location}
+                  </p>
+                  <p className="text-sm font-medium text-[#011E55]">
+                    Rp {kos.price.toLocaleString('id-ID')}/bulan
+                  </p>
+                </div>
+                <span className="px-2 py-1 bg-gray-200 dark:bg-gray-600 text-xs rounded-full capitalize">
+                  {kos.type}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
 
-          <div className="md:col-span-2 space-y-6">
-            <div className="bg-white rounded-2xl shadow-sm p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Menu Utama</h2>
-              <div className="grid grid-cols-2 gap-4">
-                {menuItems.map((item, i) => (
-                  <Link
-                    key={i}
-                    href={item.href}
-                    className={`${item.color} p-4 rounded-xl flex items-center gap-3 transition-all hover:shadow-md ${item.coming ? 'opacity-60 cursor-not-allowed' : ''}`}
-                  >
-                    <span className="text-2xl">{item.icon}</span>
-                    <div className="flex-1">
-                      <p className="font-medium text-gray-900">{item.label}</p>
-                      {item.coming && <p className="text-xs text-gray-500">Coming soon</p>}
-                    </div>
-                    {!item.coming && (
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    )}
-                  </Link>
-                ))}
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Informasi Akun</h2>
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center">
+                <User className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Nama</p>
+                <p className="font-medium text-gray-900 dark:text-white">{user?.name}</p>
               </div>
             </div>
-
-            <div className="bg-gradient-to-r from-[#011E55] to-[#0a2d6e] rounded-2xl p-6 text-white">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-bold mb-2">Butuh Bantuan?</h3>
-                  <p className="text-white/80 text-sm">Tim support kami siap membantu kamu</p>
-                </div>
-                <Link
-                  href="/contact"
-                  className="bg-white text-[#011E55] px-5 py-2.5 rounded-xl font-medium hover:bg-gray-100 transition-colors"
-                >
-                  Hubungi Kami
-                </Link>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-lg flex items-center justify-center">
+                <Home className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Email</p>
+                <p className="font-medium text-gray-900 dark:text-white">{user?.email}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg flex items-center justify-center">
+                <Star className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Status</p>
+                <p className="font-medium text-green-600">Aktif</p>
               </div>
             </div>
           </div>
