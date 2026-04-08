@@ -34,8 +34,6 @@ export default function FavoritesPage() {
     }
   };
 
-  if (!isAuthenticated) return null;
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-[#011E55] text-white py-8 px-4">

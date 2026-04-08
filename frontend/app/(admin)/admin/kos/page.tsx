@@ -118,7 +118,7 @@ export default function AdminKosPage() {
     setShowForm(true);
   };
 
-  if (!isAuthenticated || user?.role !== 'admin') return null;
+  if (user?.role !== 'admin') return null;
 
   return (
     <div className="min-h-screen bg-gray-50">
