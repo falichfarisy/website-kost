@@ -12,10 +12,12 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
 
       - name: Deploy to Production
         working-directory: ./frontend
-        run: vercel --prod --yes --token=${{ secrets.VERCEL_TOKENS }}
+        run: vercel --prod --yes
