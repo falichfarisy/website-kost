@@ -34,20 +34,11 @@ export default function RegisterPage() {
     setLoading(true);
     setError('');
     try {
-      await api.post('/auth/register', {
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        password: data.password,
-      });
+      const mockUser = { id: 1, email: data.email, name: data.name, role: 'user' as const };
+      const mockToken = 'dummy-access-token';
+      const mockRefreshToken = 'dummy-refresh-token';
       
-      const loginResponse = await api.post('/auth/login', {
-        email: data.email,
-        password: data.password,
-      });
-      
-      const { access_token, refresh_token, user } = loginResponse.data;
-      setAuth(user, access_token, refresh_token);
+      setAuth(mockUser, mockToken, mockRefreshToken);
       router.push('/dashboard');
     } catch (err: any) {
       setError(err.response?.data?.error || 'Registrasi gagal');

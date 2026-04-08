@@ -1,27 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import Link from 'next/link';
 import api from '@/lib/api';
-import { useAuthStore } from '@/lib/store';
 import { Kos } from '@/lib/types';
 import ResultCard from '@/app/components/ResultCard';
 
 export default function FavoritesPage() {
-  const router = useRouter();
-  const { isAuthenticated, user } = useAuthStore();
   const [favorites, setFavorites] = useState<Kos[]>([]);
   const [loading, setLoading] = useState(true);
   const [removing, setRemoving] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login');
-      return;
-    }
-    fetchFavorites();
-  }, [isAuthenticated, router]);
 
   const fetchFavorites = async () => {
     try {

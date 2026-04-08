@@ -8,9 +8,8 @@ import { useAuthStore } from '@/lib/store';
 import { Kos, Facility } from '@/lib/types';
 
 export default function AdminKosPage() {
-  const router = useRouter();
   const queryClient = useQueryClient();
-  const { isAuthenticated, user } = useAuthStore();
+  const { user } = useAuthStore();
   const [showForm, setShowForm] = useState(false);
   const [editingKos, setEditingKos] = useState<Kos | null>(null);
   const [formData, setFormData] = useState({
@@ -28,16 +27,9 @@ export default function AdminKosPage() {
     facility_ids: [] as number[],
   });
 
-  useEffect(() => {
-    if (!isAuthenticated || user?.role !== 'admin') {
-      router.push('/login');
-    }
-  }, [isAuthenticated, user, router]);
-
   const { data: kosList } = useQuery({
     queryKey: ['admin-kos'],
     queryFn: () => api.get('/admin/kos').then(res => res.data.data || res.data),
-    enabled: isAuthenticated && user?.role === 'admin',
   });
 
   const { data: facilities } = useQuery({

@@ -22,10 +22,10 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      user: null,
-      accessToken: null,
-      refreshToken: null,
-      isAuthenticated: false,
+      user: { id: 1, email: 'test@kose.com', name: 'Test User', role: 'user' },
+      accessToken: 'dummy-token',
+      refreshToken: 'dummy-refresh-token',
+      isAuthenticated: true,
       setAuth: (user, accessToken, refreshToken) => {
         localStorage.setItem('access_token', accessToken);
         localStorage.setItem('refresh_token', refreshToken);

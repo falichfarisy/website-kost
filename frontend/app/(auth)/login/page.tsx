@@ -32,10 +32,12 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
     try {
-      const response = await api.post('/auth/login', data);
-      const { access_token, refresh_token, user } = response.data;
-      setAuth(user, access_token, refresh_token);
-      router.push(user.role === 'admin' ? '/admin' : '/dashboard');
+      const mockUser = { id: 1, email: data.email, name: 'Test User', role: 'user' as const };
+      const mockToken = 'dummy-access-token';
+      const mockRefreshToken = 'dummy-refresh-token';
+      
+      setAuth(mockUser, mockToken, mockRefreshToken);
+      router.push('/dashboard');
     } catch (err: any) {
       setError(err.response?.data?.error || 'Login gagal');
     } finally {

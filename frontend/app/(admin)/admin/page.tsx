@@ -1,22 +1,9 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import { useAuthStore } from '@/lib/store';
 
 export default function AdminDashboardPage() {
-  const router = useRouter();
-  const { isAuthenticated, user, logout } = useAuthStore();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login');
-    } else if (user?.role !== 'admin') {
-      router.push('/dashboard');
-    }
-  }, [isAuthenticated, user, router]);
-
-  if (!isAuthenticated || user?.role !== 'admin') return null;
+  const { user, logout } = useAuthStore();
 
   return (
     <div className="min-h-screen bg-gray-50">

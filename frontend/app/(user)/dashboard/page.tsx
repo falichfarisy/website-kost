@@ -1,23 +1,10 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/store';
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const { isAuthenticated, user, logout } = useAuthStore();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login');
-    } else if (user?.role === 'admin') {
-      router.push('/admin');
-    }
-  }, [isAuthenticated, user, router]);
-
-  if (!isAuthenticated) return null;
+  const { user, logout } = useAuthStore();
 
   const menuItems = [
     { icon: "📋", label: "Booking Saya", href: "/bookings", color: "bg-purple-50 hover:bg-purple-100" },

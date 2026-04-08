@@ -143,7 +143,33 @@ go run ./cmd/server
 
 Backend berjalan di `http://localhost:8080`
 
-### 3. Setup Frontend
+### 3. Development Mode (Bypass Auth)
+
+Untuk melihat UI tanpa perlu login, gunakan mode development:
+
+```bash
+cd frontend
+npm run dev
+```
+
+Semua halaman bisa diakses langsung tanpa validasi login.
+
+#### Mengubah Role User (Development)
+
+Edit file `frontend/lib/store.ts` untuk mengganti role:
+
+```typescript
+// User biasa
+user: { id: 1, email: 'test@kose.com', name: 'Test User', role: 'user' }
+
+// Admin
+user: { id: 1, email: 'admin@kose.com', name: 'Admin', role: 'admin' }
+
+// Owner
+user: { id: 1, email: 'owner@kose.com', name: 'Owner', role: 'owner' }
+```
+
+### 4. Setup Frontend
 
 ```bash
 cd frontend
