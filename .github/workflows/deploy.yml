@@ -22,4 +22,4 @@ jobs:
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKENS }}
         working-directory: ./frontend
-        run: vercel --prod --yes
+        run: vercel --prod --yes --project=frontend
