@@ -154,19 +154,30 @@ npm run dev
 
 Semua halaman bisa diakses langsung tanpa validasi login.
 
-#### Mengubah Role User (Development)
+#### Default Role
 
-Edit file `frontend/lib/store.ts` untuk mengganti role:
+Default adalah **admin** agar semua halaman bisa diakses.
 
+#### Mengubah Role (Dua Cara)
+
+**Cara 1: Edit store.ts**
 ```typescript
-// User biasa
+// Edit baris ini di frontend/lib/store.ts
 user: { id: 1, email: 'test@kose.com', name: 'Test User', role: 'user' }
-
-// Admin
 user: { id: 1, email: 'admin@kose.com', name: 'Admin', role: 'admin' }
-
-// Owner
 user: { id: 1, email: 'owner@kose.com', name: 'Owner', role: 'owner' }
+```
+
+**Cara 2: Pakai fungsi setRole (di komponen manapun)**
+```typescript
+import { useAuthStore } from '@/lib/store';
+
+const { setRole } = useAuthStore();
+
+// Switch role tanpa harus edit file
+setRole('user');   // User biasa
+setRole('admin');  // Admin
+setRole('owner');  // Owner
 ```
 
 ### 4. Setup Frontend
