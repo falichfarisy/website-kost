@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -25,7 +26,7 @@ export default function Headers() {
   };
 
   return (
-    <header className="w-full text-white">
+    <header className="w-full text-white relative z-50">
       <nav className="w-full px-6 py-4 flex items-center justify-between">
         <Link href="/" className="text-3xl font-bold tracking-tight hover:opacity-90 transition-opacity">
           KOSE

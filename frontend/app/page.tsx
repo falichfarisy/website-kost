@@ -1,8 +1,62 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
 import Headers from "@/app/components/Headers";
-import Image from "next/image";
 import Link from "next/link";
+import { ChevronLeft, ChevronRight, Star, MapPin, Building2 } from "lucide-react";
+
+interface KosFeatured {
+  id: number;
+  name: string;
+  location: string;
+  price: number;
+  rating: number;
+  reviews: number;
+  type: string;
+  badge?: string;
+}
+
+const featuredKos: KosFeatured[] = [
+  { id: 1, name: "Kost Mahkota Regency", location: "Malang - Signature", price: 1200000, rating: 4.8, reviews: 124, type: "Putra", badge: "Terpopuler" },
+  { id: 2, name: "Kost Alam Hijau", location: "Surabaya - Wonokromo", price: 950000, rating: 4.6, reviews: 89, type: "Putri", badge: "Promo" },
+  { id: 3, name: "Kost Melati Square", location: "Jakarta - Tebet", price: 1800000, rating: 4.9, reviews: 256, type: "Campuran", badge: "Best Rated" },
+  { id: 4, name: "Kost Platinum Residence", location: "Bandung - Dago", price: 1500000, rating: 4.7, reviews: 167, type: "Putra" },
+  { id: 5, name: "Kost Senja Timur", location: "Yogyakarta - Sleman", price: 800000, rating: 4.5, reviews: 78, type: "Putri", badge: "Baru" },
+  { id: 6, name: "Kost Nusantara", location: "Semarang - Candisari", price: 1100000, rating: 4.6, reviews: 134, type: "Campuran" },
+];
+
+const howItWorks = [
+  { step: 1, title: "Cari", description: "Pilih lokasi, tipe, dan budget sesuai kebutuhanmu" },
+  { step: 2, title: "Bandingkan", description: "Lihat fasilitas, harga, dan rating dari setiap kost" },
+  { step: 3, title: "Hubungi", description: "Chat langsung dengan pemilik untuk booking" },
+];
+
+function formatPrice(price: number): string {
+  if (price >= 1000000) return `${(price / 1000000).toFixed(1)}jt`;
+  return `${(price / 1000).toFixed(0)}rb`;
+}
 
 export default function Home() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [kosType, setKosType] = useState("all");
+  const [priceRange, setPriceRange] = useState("all");
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: direction === "left" ? -320 : 320, behavior: "smooth" });
+    }
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (searchQuery) params.set("search", searchQuery);
+    if (kosType !== "all") params.set("type", kosType);
+    if (priceRange !== "all") params.set("price", priceRange);
+    window.location.href = `/search?${params.toString()}`;
+  };
+
   return (
     <div className="min-h-screen flex flex-col w-full">
       <div 
@@ -28,33 +82,71 @@ export default function Home() {
               Temukan Kost <span className="text-yellow-400">Terbaik</span> untuk Kebutuhanmu
             </h1>
             
-            <p className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
               Kami membantu kamu menemukan berbagai pilihan kost dengan mudah dan cepat. 
               Pilih berdasarkan lokasi, harga, dan fasilitas yang sesuai dengan kebutuhanmu.
             </p>
 
-            <div className="max-w-2xl mx-auto mt-10">
-              <form className="bg-white rounded-2xl shadow-2xl p-2 flex flex-col md:flex-row gap-2">
-                <div className="flex-1 relative">
-                  <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                  <input
-                    type="text"
-                    placeholder="Cari kos di area..."
-                    className="w-full h-14 pl-12 pr-4 text-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#011E55]/20"
-                  />
+            <div className="max-w-3xl mx-auto mt-10">
+              <div className="bg-white rounded-2xl shadow-2xl p-3">
+                <div className="flex flex-col lg:flex-row gap-3">
+                  <div className="flex-1 relative">
+                    <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input
+                      type="text"
+                      placeholder="Cari kos di area..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full h-12 lg:h-14 pl-12 pr-4 text-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#011E55]/20 text-base"
+                    />
+                  </div>
+
+                  <div className="relative">
+                    <select
+                      value={kosType}
+                      onChange={(e) => setKosType(e.target.value)}
+                      className="h-12 lg:h-14 px-4 pr-10 appearance-none bg-gray-50 border border-gray-200 rounded-xl text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#011E55]/20 cursor-pointer min-w-[140px]"
+                    >
+                      <option value="all">Semua Tipe</option>
+                      <option value="putra">Kost Putra</option>
+                      <option value="putri">Kost Putri</option>
+                      <option value="campuran">Kost Campuran</option>
+                    </select>
+                    <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+
+                  <div className="relative">
+                    <select
+                      value={priceRange}
+                      onChange={(e) => setPriceRange(e.target.value)}
+                      className="h-12 lg:h-14 px-4 pr-10 appearance-none bg-gray-50 border border-gray-200 rounded-xl text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#011E55]/20 cursor-pointer min-w-[160px]"
+                    >
+                      <option value="all">Semua Harga</option>
+                      <option value="500k">&lt; 500rb</option>
+                      <option value="500k-1jt">500rb - 1jt</option>
+                      <option value="1jt-2jt">1jt - 2jt</option>
+                      <option value="2jt">&gt; 2jt</option>
+                    </select>
+                    <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+
+                  <button
+                    onClick={handleSearch}
+                    className="h-12 lg:h-14 px-8 bg-[#011E55] text-white rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-[#0a2d6e] transition-all hover:shadow-lg whitespace-nowrap"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <span className="hidden sm:inline">Cari</span>
+                  </button>
                 </div>
-                <Link 
-                  href="/search"
-                  className="h-14 md:w-40 bg-[#011E55] text-white px-8 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-[#0a2d6e] transition-all hover:shadow-lg"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                  Cari
-                </Link>
-              </form>
+              </div>
               
               <div className="flex flex-wrap justify-center gap-3 mt-4 text-sm text-white/60">
                 <span>Popular:</span>
@@ -81,6 +173,100 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      <section className="py-20 px-6 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+            <div>
+              <div className="inline-block px-4 py-1 bg-amber-100 text-amber-700 rounded-full text-sm font-medium mb-4">
+                REKOMENDASI KAMI
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                Kost <span className="text-[#011E55]">Unggulan</span>
+              </h2>
+              <p className="text-gray-600 mt-2">Pilihan kost terbaik yang paling banyak dikunjungi</p>
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => scroll("left")} className="w-12 h-12 rounded-full border-2 border-gray-200 flex items-center justify-center hover:border-[#011E55] hover:text-[#011E55] transition-colors">
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button onClick={() => scroll("right")} className="w-12 h-12 rounded-full border-2 border-gray-200 flex items-center justify-center hover:border-[#011E55] hover:text-[#011E55] transition-colors">
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          <div ref={scrollRef} className="flex gap-6 overflow-x-auto pb-4" style={{ scrollbarWidth: "none" }}>
+            {featuredKos.map((kos) => (
+              <Link key={kos.id} href={`/kos/${kos.id}`} className="flex-shrink-0 w-[300px] group">
+                <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1">
+                  <div className="h-48 bg-gradient-to-br from-[#011E55]/10 to-[#011E55]/5 relative overflow-hidden flex items-center justify-center">
+                    <Building2 className="w-16 h-16 text-[#011E55]/20" />
+                    {kos.badge && <span className="absolute top-3 left-3 px-3 py-1 bg-amber-500 text-white text-xs font-semibold rounded-full">{kos.badge}</span>}
+                    <span className="absolute top-3 right-3 px-3 py-1 bg-white/90 backdrop-blur-sm text-[#011E55] text-xs font-medium rounded-full">{kos.type}</span>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#011E55] transition-colors line-clamp-1">{kos.name}</h3>
+                    <div className="flex items-center gap-1 text-gray-500 text-sm mb-3">
+                      <MapPin className="w-4 h-4" />
+                      <span className="line-clamp-1">{kos.location}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-xl font-bold text-[#011E55]">{formatPrice(kos.price)}</span>
+                        <span className="text-gray-500 text-sm">/bln</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                        <span className="text-sm font-medium text-gray-900">{kos.rating}</span>
+                        <span className="text-gray-400 text-sm">({kos.reviews})</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <div className="text-center mt-10">
+            <Link href="/search" className="inline-flex items-center gap-2 px-6 py-3 bg-[#011E55] text-white rounded-xl font-medium hover:bg-[#0a2d6e] transition-colors">
+              Lihat Semua Kost
+              <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="inline-block px-4 py-1 bg-[#011E55]/10 text-[#011E55] rounded-full text-sm font-medium mb-4">
+              CARA KERJA
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+              Cari Kost dalam <span className="text-[#011E55]">3 Langkah</span>
+            </h2>
+            <p className="text-gray-600 mt-4 max-w-2xl mx-auto">Proses pencarian kost yang mudah dan praktis</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {howItWorks.map((item, index) => (
+              <div key={index} className="text-center group">
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-[#011E55] text-white rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={index === 0 ? "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" : index === 1 ? "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" : "M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"} />
+                  </svg>
+                </div>
+                <div className="inline-flex items-center justify-center w-8 h-8 bg-amber-500 text-white rounded-full text-sm font-bold mb-4">
+                  {item.step}
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
+                <p className="text-gray-600">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="py-20 px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
