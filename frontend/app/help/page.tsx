@@ -1,56 +1,58 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { useRouter } from "next/navigation";
 import Headers from "@/app/components/Headers";
-import Link from "next/link";
-import { Search, MessageCircle, Mail, Phone, MapPin } from "lucide-react";
-
-const faqCategories = [
-  {
-    title: "Pencarian Kost",
-    icon: "🔍",
-    faqs: [
-      { q: "Bagaimana cara mencari kost di KOSE?", a: "Kamu bisa menggunakan fitur pencarian di halaman utama. Masukkan lokasi, pilih tipe kost (putra/putri/campur), tentukan range harga, dan pilih fasilitas yang diinginkan." },
-      { q: "Apa saja filter yang tersedia?", a: "Kami menyediakan filter berdasarkan: tipe kost, harga (min-max), lokasi/kota, fasilitas (WiFi, AC, kamar mandi dalam, dll), dan rating." },
-      { q: "Bagaimana cara melihat lokasi kost?", a: "Setiap halaman detail kost menampilkan peta lokasi. Kamu juga bisa menggunakan fitur-directions untuk melihat rute dari lokasi tertentu." },
-    ]
-  },
-  {
-    title: "Akun & Pendaftaran",
-    icon: "👤",
-    faqs: [
-      { q: "Apakah saya harus daftar untuk mencari kost?", a: "Tidak, kamu bisa mencari kost tanpa akun. Namun, untuk menyimpan favorit dan menulis ulasan, kamu perlu membuat akun." },
-      { q: "Bagaimana cara daftar akun?", a: "Klik tombol 'Daftar' di halaman utama. Isi nama lengkap, email, password, dan nomor HP. Verifikasi email kamu untuk aktivasi akun." },
-      { q: "Apa yang bisa saya lakukan setelah login?", a: "Setelah login, kamu bisa: menyimpan kost favorit, menulis ulasan dan rating, melihat riwayat pencarian, dan mengelola profil." },
-    ]
-  },
-  {
-    title: "Favorit & Booking",
-    icon: "❤️",
-    faqs: [
-      { q: "Bagaimana cara menyimpan kost favorit?", a: "Klik tombol '❤️ Favorit' di halaman detail kost. Kost akan tersimpan di menu 'Favorit Saya'." },
-      { q: "Apakah ada biaya untuk menyimpan favorit?", a: "Tidak, menyimpan favorit sepenuhnya gratis dan tanpa batas jumlah." },
-      { q: "Bagaimana cara menghubungi pemilik kost?", a: "Di halaman detail kost, ada tombol 'Hubungi Penyedia' yang akan menampilkan nomor WhatsApp atau formulir kontak." },
-    ]
-  },
-  {
-    title: "Ulasan & Rating",
-    icon: "⭐",
-    faqs: [
-      { q: "Bagaimana cara menulis ulasan?", a: "Login ke akun kamu, buka halaman detail kost, lalu klik 'Tulis Ulasan'. Berikan rating 1-5 bintang dan tulis pengalamanmu." },
-      { q: "Apakah ulasan bisa diedit atau dihapus?", a: "Ya, kamu bisa mengedit atau menghapus ulasanmu sendiri dari menu profil > Riwayat Ulasan." },
-      { q: "Bagaimana rating kost dihitung?", a: "Rating adalah rata-rata dari semua ulasan yang diberikan pengguna. Kami sangat menekankan jujur dalam memberikan ulasan." },
-    ]
-  },
-];
+import { Search, MessageCircle, Mail, Phone } from "lucide-react";
 
 export default function HelpPage() {
+  const router = useRouter();
+  const navigate = useCallback((path: string) => router.push(path), [router]);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
   };
+
+  const faqCategories = [
+    {
+      title: "Pencarian Kost",
+      icon: "🔍",
+      faqs: [
+        { q: "Bagaimana cara mencari kost di KOSE?", a: "Kamu bisa menggunakan fitur pencarian di halaman utama. Masukkan lokasi, pilih tipe kost (putra/putri/campur), tentukan range harga, dan pilih fasilitas yang diinginkan." },
+        { q: "Apa saja filter yang tersedia?", a: "Kami menyediakan filter berdasarkan: tipe kost, harga (min-max), lokasi/kota, fasilitas (WiFi, AC, kamar mandi dalam, dll), dan rating." },
+        { q: "Bagaimana cara melihat lokasi kost?", a: "Setiap halaman detail kost menampilkan peta lokasi. Kamu juga bisa menggunakan fitur-directions untuk melihat rute dari lokasi tertentu." },
+      ]
+    },
+    {
+      title: "Akun & Pendaftaran",
+      icon: "👤",
+      faqs: [
+        { q: "Apakah saya harus daftar untuk mencari kost?", a: "Tidak, kamu bisa mencari kost tanpa akun. Namun, untuk menyimpan favorit dan menulis ulasan, kamu perlu membuat akun." },
+        { q: "Bagaimana cara daftar akun?", a: "Klik tombol 'Daftar' di halaman utama. Isi nama lengkap, email, password, dan nomor HP. Verifikasi email kamu untuk aktivasi akun." },
+        { q: "Apa yang bisa saya lakukan setelah login?", a: "Setelah login, kamu bisa: menyimpan kost favorit, menulis ulasan dan rating, melihat riwayat pencarian, dan mengelola profil." },
+      ]
+    },
+    {
+      title: "Favorit & Booking",
+      icon: "❤️",
+      faqs: [
+        { q: "Bagaimana cara menyimpan kost favorit?", a: "Klik tombol '❤️ Favorit' di halaman detail kost. Kost akan tersimpan di menu 'Favorit Saya'." },
+        { q: "Apakah ada biaya untuk menyimpan favorit?", a: "Tidak, menyimpan favorit sepenuhnya gratis dan tanpa batas jumlah." },
+        { q: "Bagaimana cara menghubungi pemilik kost?", a: "Di halaman detail kost, ada tombol 'Hubungi Penyedia' yang akan menampilkan nomor WhatsApp atau formulir kontak." },
+      ]
+    },
+    {
+      title: "Ulasan & Rating",
+      icon: "⭐",
+      faqs: [
+        { q: "Bagaimana cara menulis ulasan?", a: "Login ke akun kamu, buka halaman detail kost, lalu klik 'Tulis Ulasan'. Berikan rating 1-5 bintang dan tulis pengalamanmu." },
+        { q: "Apakah ulasan bisa diedit atau dihapus?", a: "Ya, kamu bisa mengedit atau menghapus ulasanmu sendiri dari menu profil > Riwayat Ulasan." },
+        { q: "Bagaimana rating kost dihitung?", a: "Rating adalah rata-rata dari semua ulasan yang diberikan pengguna. Kami sangat menekankan jujur dalam memberikan ulasan." },
+      ]
+    },
+  ];
 
   return (
     <div className="min-h-screen flex flex-col w-full">
@@ -74,7 +76,7 @@ export default function HelpPage() {
             </div>
             
             <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-              Pusat <span className="text-yellow-400">Bantuan</span>
+              pusat <span className="text-yellow-400">Bantuan</span>
             </h1>
             
             <p className="text-xl text-white/90 max-w-2xl mx-auto">
@@ -158,13 +160,13 @@ export default function HelpPage() {
               </p>
               
               <div className="flex flex-wrap justify-center gap-4">
-                <Link 
-                  href="/contact"
+                <button
+                  onClick={() => navigate("/contact")}
                   className="inline-flex items-center gap-2 px-6 py-3 bg-yellow-400 text-[#011E55] rounded-xl font-bold hover:bg-yellow-300 transition-colors"
                 >
                   <Mail className="w-5 h-5" />
                   Hubungi Kami
-                </Link>
+                </button>
                 <a 
                   href="https://wa.me/6281234567890"
                   target="_blank"
@@ -192,16 +194,16 @@ export default function HelpPage() {
             <div>
               <h4 className="text-white font-bold mb-5">Tautan</h4>
               <ul className="space-y-3">
-                <li><Link href="/search" className="text-white/90 hover:text-white transition-colors">Cari Kost</Link></li>
-                <li><Link href="/about" className="text-white/90 hover:text-white transition-colors">Tentang Kami</Link></li>
-                <li><Link href="/articles" className="text-white/90 hover:text-white transition-colors">Artikel</Link></li>
+                <li><button onClick={() => navigate("/search")} className="text-white/90 hover:text-white transition-colors text-left">Cari Kost</button></li>
+                <li><button onClick={() => navigate("/about")} className="text-white/90 hover:text-white transition-colors text-left">Tentang Kami</button></li>
+                <li><button onClick={() => navigate("/articles")} className="text-white/90 hover:text-white transition-colors text-left">Artikel</button></li>
               </ul>
             </div>
             <div>
               <h4 className="text-white font-bold mb-5">Bantuan</h4>
               <ul className="space-y-3">
-                <li><Link href="/help" className="text-white/90 hover:text-white transition-colors">Pusat Bantuan</Link></li>
-                <li><Link href="/contact" className="text-white/90 hover:text-white transition-colors">Hubungi Kami</Link></li>
+                <li><button onClick={() => navigate("/help")} className="text-white/90 hover:text-white transition-colors text-left">Pusat Bantuan</button></li>
+                <li><button onClick={() => navigate("/contact")} className="text-white/90 hover:text-white transition-colors text-left">Hubungi Kami</button></li>
               </ul>
             </div>
           </div>
@@ -211,8 +213,8 @@ export default function HelpPage() {
               &copy; {new Date().getFullYear()} KOSE. All rights reserved.
             </p>
             <div className="flex gap-8 text-sm text-white/80">
-              <Link href="#" className="hover:text-white font-medium transition-colors">Kebijakan Privasi</Link>
-              <Link href="#" className="hover:text-white font-medium transition-colors">Syarat & Ketentuan</Link>
+              <span className="hover:text-white font-medium transition-colors cursor-default">Kebijakan Privasi</span>
+              <span className="hover:text-white font-medium transition-colors cursor-default">Syarat & Ketentuan</span>
             </div>
           </div>
         </div>

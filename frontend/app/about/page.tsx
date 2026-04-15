@@ -1,10 +1,14 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 import Headers from "@/app/components/Headers";
-import Link from "next/link";
 import { Building2, Users, Star, Shield, Heart, Clock, Search, CheckCircle2 } from "lucide-react";
 
 export default function AboutPage() {
+  const router = useRouter();
+  const navigate = useCallback((path: string) => router.push(path), [router]);
+
   return (
     <div className="min-h-screen flex flex-col w-full">
       <div 
@@ -35,19 +39,19 @@ export default function AboutPage() {
             </p>
 
             <div className="flex flex-wrap justify-center gap-4 pt-4">
-              <Link 
-                href="/search"
+              <button
+                onClick={() => navigate("/search")}
                 className="inline-flex items-center gap-2 px-8 py-4 bg-yellow-400 text-[#011E55] rounded-xl font-bold hover:bg-yellow-300 transition-all shadow-lg hover:shadow-xl"
               >
                 <Search className="w-5 h-5" />
                 Cari Kost
-              </Link>
-              <Link 
-                href="/contact"
+              </button>
+              <button
+                onClick={() => navigate("/contact")}
                 className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-xl font-bold hover:bg-white/20 transition-all border border-white/20"
               >
                 Hubungi Kami
-              </Link>
+              </button>
             </div>
           </div>
 
@@ -245,19 +249,19 @@ export default function AboutPage() {
             Bergabung dengan ribuan pengguna yang telah menemukan kost terbaik mereka melalui KOSE.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link 
-              href="/search"
+            <button
+              onClick={() => navigate("/search")}
               className="inline-flex items-center gap-2 px-8 py-4 bg-[#011E55] text-white rounded-xl font-bold hover:bg-[#0a2d6e] transition-all shadow-lg hover:shadow-xl"
             >
               <Search className="w-5 h-5" />
               Mulai Pencarian
-            </Link>
-            <Link 
-              href="/register"
+            </button>
+            <button
+              onClick={() => navigate("/register")}
               className="inline-flex items-center gap-2 px-8 py-4 bg-yellow-400 text-[#011E55] rounded-xl font-bold hover:bg-yellow-300 transition-all shadow-lg hover:shadow-xl"
             >
               Daftar Gratis
-            </Link>
+            </button>
           </div>
         </div>
       </section>
@@ -286,9 +290,9 @@ export default function AboutPage() {
             <div>
               <h4 className="text-white font-bold mb-5">Tautan Cepat</h4>
               <ul className="space-y-3">
-                <li><Link href="/search" className="text-white/90 hover:text-white transition-colors">Cari Kost</Link></li>
-                <li><Link href="/login" className="text-white/90 hover:text-white transition-colors">Masuk</Link></li>
-                <li><Link href="/register" className="text-white/90 hover:text-white transition-colors">Daftar</Link></li>
+                <li><button onClick={() => navigate("/search")} className="text-white/90 hover:text-white transition-colors text-left">Cari Kost</button></li>
+                <li><button onClick={() => navigate("/login")} className="text-white/90 hover:text-white transition-colors text-left">Masuk</button></li>
+                <li><button onClick={() => navigate("/register")} className="text-white/90 hover:text-white transition-colors text-left">Daftar</button></li>
               </ul>
             </div>
             <div>
@@ -315,8 +319,8 @@ export default function AboutPage() {
               &copy; {new Date().getFullYear()} KOSE. All rights reserved.
             </p>
             <div className="flex gap-8 text-sm text-white/80">
-              <Link href="#" className="hover:text-white font-medium transition-colors">Kebijakan Privasi</Link>
-              <Link href="#" className="hover:text-white font-medium transition-colors">Syarat & Ketentuan</Link>
+              <span className="hover:text-white font-medium transition-colors cursor-default">Kebijakan Privasi</span>
+              <span className="hover:text-white font-medium transition-colors cursor-default">Syarat & Ketentuan</span>
             </div>
           </div>
         </div>

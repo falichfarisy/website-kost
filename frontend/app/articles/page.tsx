@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { useRouter } from "next/navigation";
 import Headers from "@/app/components/Headers";
-import Link from "next/link";
 import { BookOpen, Search, ArrowRight, Clock, Calendar } from "lucide-react";
 
 const articles = [
@@ -71,6 +71,8 @@ const articles = [
 const categories = ["Semua", "Tips", "Panduan", "Artikel", "News"];
 
 export default function ArticlesPage() {
+  const router = useRouter();
+  const navigate = useCallback((path: string) => router.push(path), [router]);
   const [activeCategory, setActiveCategory] = useState("Semua");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -126,7 +128,7 @@ export default function ArticlesPage() {
         </div>
       </div>
 
-      <section className="py-12 px-6 bg-gray-50">
+      <section className="py-12 px-6 bg-gray-50 flex-1">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-wrap justify-center gap-3 mb-10">
             {categories.map((cat, i) => (
@@ -175,13 +177,13 @@ export default function ArticlesPage() {
                     <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                       {article.excerpt}
                     </p>
-                    <Link 
-                      href={`/articles/${article.id}`}
+                    <button
+                      onClick={() => navigate("/articles/" + article.id)}
                       className="inline-flex items-center gap-1 text-[#011E55] font-medium hover:gap-2 transition-all"
                     >
                       Baca selengkapnya 
                       <ArrowRight className="w-4 h-4" />
-                    </Link>
+                    </button>
                   </div>
                 </article>
               ))}
@@ -208,16 +210,16 @@ export default function ArticlesPage() {
             <div>
               <h4 className="text-white font-bold mb-5">Tautan</h4>
               <ul className="space-y-3">
-                <li><Link href="/search" className="text-white/90 hover:text-white transition-colors">Cari Kost</Link></li>
-                <li><Link href="/about" className="text-white/90 hover:text-white transition-colors">Tentang Kami</Link></li>
-                <li><Link href="/articles" className="text-white/90 hover:text-white transition-colors">Artikel</Link></li>
+                <li><button onClick={() => navigate("/search")} className="text-white/90 hover:text-white transition-colors text-left">Cari Kost</button></li>
+                <li><button onClick={() => navigate("/about")} className="text-white/90 hover:text-white transition-colors text-left">Tentang Kami</button></li>
+                <li><button onClick={() => navigate("/articles")} className="text-white/90 hover:text-white transition-colors text-left">Artikel</button></li>
               </ul>
             </div>
             <div>
               <h4 className="text-white font-bold mb-5">Bantuan</h4>
               <ul className="space-y-3">
-                <li><Link href="/help" className="text-white/90 hover:text-white transition-colors">Pusat Bantuan</Link></li>
-                <li><Link href="/contact" className="text-white/90 hover:text-white transition-colors">Hubungi Kami</Link></li>
+                <li><button onClick={() => navigate("/help")} className="text-white/90 hover:text-white transition-colors text-left">Pusat Bantuan</button></li>
+                <li><button onClick={() => navigate("/contact")} className="text-white/90 hover:text-white transition-colors text-left">Hubungi Kami</button></li>
               </ul>
             </div>
           </div>
@@ -227,8 +229,8 @@ export default function ArticlesPage() {
               &copy; {new Date().getFullYear()} KOSE. All rights reserved.
             </p>
             <div className="flex gap-8 text-sm text-white/80">
-              <Link href="#" className="hover:text-white font-medium transition-colors">Kebijakan Privasi</Link>
-              <Link href="#" className="hover:text-white font-medium transition-colors">Syarat & Ketentuan</Link>
+              <span className="hover:text-white font-medium transition-colors cursor-default">Kebijakan Privasi</span>
+              <span className="hover:text-white font-medium transition-colors cursor-default">Syarat & Ketentuan</span>
             </div>
           </div>
         </div>

@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { useRouter } from "next/navigation";
 import Headers from "@/app/components/Headers";
-import Link from "next/link";
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react";
 
 export default function ContactPage() {
+  const router = useRouter();
+  const navigate = useCallback((path: string) => router.push(path), [router]);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -232,16 +234,16 @@ export default function ContactPage() {
             <div>
               <h4 className="text-white font-bold mb-5">Tautan</h4>
               <ul className="space-y-3">
-                <li><Link href="/search" className="text-white/90 hover:text-white transition-colors">Cari Kost</Link></li>
-                <li><Link href="/about" className="text-white/90 hover:text-white transition-colors">Tentang Kami</Link></li>
-                <li><Link href="/articles" className="text-white/90 hover:text-white transition-colors">Artikel</Link></li>
+                <li><button onClick={() => navigate("/search")} className="text-white/90 hover:text-white transition-colors text-left">Cari Kost</button></li>
+                <li><button onClick={() => navigate("/about")} className="text-white/90 hover:text-white transition-colors text-left">Tentang Kami</button></li>
+                <li><button onClick={() => navigate("/articles")} className="text-white/90 hover:text-white transition-colors text-left">Artikel</button></li>
               </ul>
             </div>
             <div>
               <h4 className="text-white font-bold mb-5">Bantuan</h4>
               <ul className="space-y-3">
-                <li><Link href="/help" className="text-white/90 hover:text-white transition-colors">Pusat Bantuan</Link></li>
-                <li><Link href="/contact" className="text-white/90 hover:text-white transition-colors">Hubungi Kami</Link></li>
+                <li><button onClick={() => navigate("/help")} className="text-white/90 hover:text-white transition-colors text-left">Pusat Bantuan</button></li>
+                <li><button onClick={() => navigate("/contact")} className="text-white/90 hover:text-white transition-colors text-left">Hubungi Kami</button></li>
               </ul>
             </div>
           </div>
@@ -251,8 +253,8 @@ export default function ContactPage() {
               &copy; {new Date().getFullYear()} KOSE. All rights reserved.
             </p>
             <div className="flex gap-8 text-sm text-white/80">
-              <Link href="#" className="hover:text-white font-medium transition-colors">Kebijakan Privasi</Link>
-              <Link href="#" className="hover:text-white font-medium transition-colors">Syarat & Ketentuan</Link>
+              <span className="hover:text-white font-medium transition-colors cursor-default">Kebijakan Privasi</span>
+              <span className="hover:text-white font-medium transition-colors cursor-default">Syarat & Ketentuan</span>
             </div>
           </div>
         </div>
