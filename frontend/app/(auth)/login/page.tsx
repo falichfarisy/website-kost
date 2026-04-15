@@ -37,7 +37,7 @@ export default function LoginPage() {
       const mockRefreshToken = 'dummy-refresh-token';
       
       setAuth(mockUser, mockToken, mockRefreshToken);
-      router.push('/dashboard');
+      router.push('/');
     } catch (err: any) {
       setError(err.response?.data?.error || 'Login gagal');
     } finally {
