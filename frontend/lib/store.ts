@@ -23,14 +23,15 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      user: { id: 1, email: 'admin@kose.com', name: 'Admin User', role: 'admin' },
-      accessToken: 'dummy-token',
-      refreshToken: 'dummy-refresh-token',
-      isAuthenticated: true,
+      user: null,
+      accessToken: null,
+      refreshToken: null,
+      isAuthenticated: false,
       setAuth: (user, accessToken, refreshToken) => {
+        const hasValidToken = Boolean(accessToken && accessToken.length > 0);
         localStorage.setItem('access_token', accessToken);
         localStorage.setItem('refresh_token', refreshToken);
-        set({ user, accessToken, refreshToken, isAuthenticated: true });
+        set({ user, accessToken, refreshToken, isAuthenticated: hasValidToken });
       },
       logout: () => {
         localStorage.removeItem('access_token');
@@ -41,7 +42,7 @@ export const useAuthStore = create<AuthState>()(
         const roleNames = { user: 'Test User', admin: 'Admin User', owner: 'Owner User' };
         const roleEmails = { user: 'test@kose.com', admin: 'admin@kose.com', owner: 'owner@kose.com' };
         const newUser = { id: 1, email: roleEmails[role], name: roleNames[role], role };
-        set({ user: newUser });
+        set({ user: newUser, accessToken: 'dev-token', refreshToken: 'dev-refresh', isAuthenticated: true });
       },
     }),
     {
@@ -49,6 +50,7 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({
         user: state.user,
         isAuthenticated: state.isAuthenticated,
+        accessToken: state.accessToken,
       }),
     }
   )
