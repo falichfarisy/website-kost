@@ -1,14 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Roboto } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { PWAProvider } from "@/components/PWAProvider";
 import { ChatLayout } from "@/components/ChatLayout";
-
-const roboto = Roboto({
-  variable: "--font-roboto",
-  subsets: ["latin"],
-})
 
 export const metadata: Metadata = {
   title: "KOSE - Temukan Kost Terbaik",
@@ -50,9 +44,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
-      <body
-        className={`${roboto.variable} ${roboto.variable} antialiased`}
-      >
+      <body className="antialiased">
         <Providers>
           <PWAProvider />
           {children}
