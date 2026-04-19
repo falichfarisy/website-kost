@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import Headers from "@/app/components/Headers";
-import { Building2, Users, Star, Shield, Heart, Clock, Search, CheckCircle2 } from "lucide-react";
+import { Users, Star, Shield, Heart, Clock, Search, CheckCircle2 } from "lucide-react";
 
 export default function AboutPage() {
   const router = useRouter();

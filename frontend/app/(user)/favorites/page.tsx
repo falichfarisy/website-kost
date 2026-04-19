@@ -5,6 +5,7 @@ import Link from 'next/link';
 import api from '@/lib/api';
 import { Kos } from '@/lib/types';
 import ResultCard from '@/app/components/ResultCard';
+import { Heart, Search } from 'lucide-react';
 
 export default function FavoritesPage() {
   const [favorites, setFavorites] = useState<Kos[]>([]);
@@ -36,9 +37,12 @@ export default function FavoritesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-[#011E55] text-white py-8 px-4">
+        <div className="bg-[#011E55] text-white py-8 px-4">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold">Favorit Saya ❤️</h1>
+          <h1 className="text-3xl font-bold flex items-center gap-3">
+            <Heart className="w-8 h-8 text-red-500 fill-current" />
+            Favorit Saya
+          </h1>
           <p className="mt-2 text-white/80">Kost yang telah kamu simpan</p>
         </div>
       </div>
@@ -50,7 +54,9 @@ export default function FavoritesPage() {
           </div>
         ) : favorites.length === 0 ? (
           <div className="text-center py-20">
-            <div className="text-7xl mb-6">💔</div>
+            <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-red-50 flex items-center justify-center">
+              <Heart className="w-12 h-12 text-red-400" />
+            </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-3">Belum Ada Favorit</h2>
             <p className="text-gray-600 mb-8 max-w-md mx-auto">
               Kamu belum menyimpan kost apapun. Yuk, cari kost favoritmu sekarang!

@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import { useRouter } from "next/navigation";
 import Headers from "@/app/components/Headers";
-import { Search, MessageCircle, Mail, Phone } from "lucide-react";
+import { Search, MessageCircle, Mail, Phone, Search as SearchIcon, User, Heart, Star, ChevronDown } from "lucide-react";
 
 export default function HelpPage() {
   const router = useRouter();
@@ -18,7 +18,7 @@ export default function HelpPage() {
   const faqCategories = [
     {
       title: "Pencarian Kost",
-      icon: "🔍",
+      icon: SearchIcon,
       faqs: [
         { q: "Bagaimana cara mencari kost di KOSE?", a: "Kamu bisa menggunakan fitur pencarian di halaman utama. Masukkan lokasi, pilih tipe kost (putra/putri/campur), tentukan range harga, dan pilih fasilitas yang diinginkan." },
         { q: "Apa saja filter yang tersedia?", a: "Kami menyediakan filter berdasarkan: tipe kost, harga (min-max), lokasi/kota, fasilitas (WiFi, AC, kamar mandi dalam, dll), dan rating." },
@@ -27,7 +27,7 @@ export default function HelpPage() {
     },
     {
       title: "Akun & Pendaftaran",
-      icon: "👤",
+      icon: User,
       faqs: [
         { q: "Apakah saya harus daftar untuk mencari kost?", a: "Tidak, kamu bisa mencari kost tanpa akun. Namun, untuk menyimpan favorit dan menulis ulasan, kamu perlu membuat akun." },
         { q: "Bagaimana cara daftar akun?", a: "Klik tombol 'Daftar' di halaman utama. Isi nama lengkap, email, password, dan nomor HP. Verifikasi email kamu untuk aktivasi akun." },
@@ -36,16 +36,16 @@ export default function HelpPage() {
     },
     {
       title: "Favorit & Booking",
-      icon: "❤️",
+      icon: Heart,
       faqs: [
-        { q: "Bagaimana cara menyimpan kost favorit?", a: "Klik tombol '❤️ Favorit' di halaman detail kost. Kost akan tersimpan di menu 'Favorit Saya'." },
+        { q: "Bagaimana cara menyimpan kost favorit?", a: "Klik tombol 'Favorit' di halaman detail kost. Kost akan tersimpan di menu 'Favorit Saya'." },
         { q: "Apakah ada biaya untuk menyimpan favorit?", a: "Tidak, menyimpan favorit sepenuhnya gratis dan tanpa batas jumlah." },
         { q: "Bagaimana cara menghubungi pemilik kost?", a: "Di halaman detail kost, ada tombol 'Hubungi Penyedia' yang akan menampilkan nomor WhatsApp atau formulir kontak." },
       ]
     },
     {
       title: "Ulasan & Rating",
-      icon: "⭐",
+      icon: Star,
       faqs: [
         { q: "Bagaimana cara menulis ulasan?", a: "Login ke akun kamu, buka halaman detail kost, lalu klik 'Tulis Ulasan'. Berikan rating 1-5 bintang dan tulis pengalamanmu." },
         { q: "Apakah ulasan bisa diedit atau dihapus?", a: "Ya, kamu bisa mengedit atau menghapus ulasanmu sendiri dari menu profil > Riwayat Ulasan." },
@@ -111,28 +111,40 @@ export default function HelpPage() {
             {faqCategories.map((category, catIndex) => (
               <div key={catIndex}>
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="text-2xl">{category.icon}</span>
-                  <h3 className="text-lg font-bold text-[#011E55]">{category.title}</h3>
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                    catIndex === 0 ? 'bg-blue-100' :
+                    catIndex === 1 ? 'bg-purple-100' :
+                    catIndex === 2 ? 'bg-pink-100' :
+                    'bg-yellow-100'
+                  }`}>
+                    <category.icon className={`w-5 h-5 ${
+                      catIndex === 0 ? 'text-blue-600' :
+                      catIndex === 1 ? 'text-purple-600' :
+                      catIndex === 2 ? 'text-pink-600' :
+                      'text-yellow-600'
+                    }`} />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900">{category.title}</h3>
                 </div>
                 <div className="space-y-2">
                   {category.faqs.map((faq, faqIndex) => {
                     const globalIndex = catIndex * 10 + faqIndex;
                     return (
-                      <div key={faqIndex} className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                      <div 
+                        key={faqIndex} 
+                        className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
+                      >
                         <button
                           onClick={() => toggleFaq(globalIndex)}
                           className="w-full px-5 py-4 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
                         >
                           <span className="font-medium text-gray-900">{faq.q}</span>
-                          <svg 
-                            className={`w-5 h-5 text-gray-400 transition-transform flex-shrink-0 ml-4 ${openFaq === globalIndex ? 'rotate-180' : ''}`} 
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
+                          <ChevronDown 
+                            className={`w-5 h-5 text-gray-400 transition-all duration-300 flex-shrink-0 ml-4 ${openFaq === globalIndex ? 'rotate-180 text-[#011E55]' : ''}`} 
+                          />
                         </button>
                         {openFaq === globalIndex && (
-                          <div className="px-5 pb-4 pt-2 text-gray-600 bg-gray-50 border-t border-gray-100">
+                          <div className="px-5 pb-4 pt-2 text-gray-600 bg-gray-50 border-t border-gray-100 animate-fade-in-up">
                             {faq.a}
                           </div>
                         )}

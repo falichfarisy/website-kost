@@ -7,7 +7,7 @@ import api from '@/lib/api';
 import { Kos, Review, Facility } from '@/lib/types';
 import { useAuthStore } from '@/lib/store';
 import { useChatStore } from '@/lib/chat-store';
-import { Heart, Star, MapPin, MessageCircle, CheckCircle, Share2, ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
+import { Heart, Star, MapPin, MessageCircle, CheckCircle, Share2, ChevronLeft, ChevronRight, Calendar, Lightbulb } from 'lucide-react';
 import Link from 'next/link';
 import BookingModal from '@/components/BookingModal';
 
@@ -378,8 +378,9 @@ export default function KosDetailPage() {
               </div>
 
               <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
-                <p className="text-sm text-blue-800 dark:text-blue-300 text-center">
-                  💡 Langsung chat pemilik untuk tanya jadwal visit atau negotiate harga!
+                <p className="text-sm text-blue-800 dark:text-blue-300 text-center flex items-center justify-center gap-2">
+                  <Lightbulb className="w-4 h-4" />
+                  Langsung chat pemilik untuk tanya jadwal visit atau negotiate harga!
                 </p>
               </div>
             </div>

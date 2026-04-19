@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import { useRouter } from "next/navigation";
 import Headers from "@/app/components/Headers";
-import { BookOpen, Search, ArrowRight, Clock, Calendar } from "lucide-react";
+import { BookOpen, Search, ArrowRight, Clock, Calendar, GraduationCap, Home, Wallet, Users, ClipboardList, AlertTriangle } from "lucide-react";
 
 const articles = [
   {
@@ -12,7 +12,7 @@ const articles = [
     excerpt: "Panduan lengkap memilih kost strategis dengan budget terjangkau...",
     category: "Tips",
     date: "28 Maret 2026",
-    image: "🏫",
+    icon: GraduationCap,
     readTime: "5 min",
     color: "from-blue-500 to-blue-600",
   },
@@ -22,7 +22,7 @@ const articles = [
     excerpt: "WiFi, AC, atau kamar mandi dalam? Ini fasilitas yang wajib dipertimbangkan...",
     category: "Panduan",
     date: "25 Maret 2026",
-    image: "🏠",
+    icon: Home,
     readTime: "4 min",
     color: "from-green-500 to-green-600",
   },
@@ -32,7 +32,7 @@ const articles = [
     excerpt: "Tidak perlu malu! Ini strategi jitu mendapat harga terbaik...",
     category: "Tips",
     date: "22 Maret 2026",
-    image: "💰",
+    icon: Wallet,
     readTime: "3 min",
     color: "from-yellow-500 to-yellow-600",
   },
@@ -42,7 +42,7 @@ const articles = [
     excerpt: "Mana yang lebih cocok untukmu? Ini perbandingannya...",
     category: "Artikel",
     date: "20 Maret 2026",
-    image: "👥",
+    icon: Users,
     readTime: "6 min",
     color: "from-purple-500 to-purple-600",
   },
@@ -52,7 +52,7 @@ const articles = [
     excerpt: "Jangan sampai tertipu! Perhatikan hal-hal ini sebelum deal...",
     category: "Panduan",
     date: "18 Maret 2026",
-    image: "📋",
+    icon: ClipboardList,
     readTime: "7 min",
     color: "from-pink-500 to-pink-600",
   },
@@ -62,7 +62,7 @@ const articles = [
     excerpt: "Hindari kesalahan-kesalahan ini agar tidak menyesal nanti...",
     category: "Tips",
     date: "15 Maret 2026",
-    image: "⚠️",
+    icon: AlertTriangle,
     readTime: "4 min",
     color: "from-red-500 to-red-600",
   },
@@ -152,10 +152,15 @@ export default function ArticlesPage() {
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredArticles.map((article) => (
-                <article key={article.id} className="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-xl transition-all duration-300 group border border-gray-100">
-                  <div className={`h-40 bg-gradient-to-br ${article.color} flex items-center justify-center relative`}>
-                    <span className="text-6xl opacity-80">{article.image}</span>
+              {filteredArticles.map((article, index) => (
+                <article 
+                  key={article.id} 
+                  className="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-xl transition-all duration-300 group border border-gray-100 animate-fade-in-up"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className={`h-40 bg-gradient-to-br ${article.color} flex items-center justify-center relative overflow-hidden`}>
+                    <div className="absolute inset-0 bg-white/10 animate-pulse-glow" />
+                    <article.icon className="w-16 h-16 text-white relative z-10 animate-scale-in" style={{ animationDelay: `${index * 100 + 200}ms` }} />
                     <span className="absolute top-4 left-4 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-xs font-medium">
                       {article.category}
                     </span>

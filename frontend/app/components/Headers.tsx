@@ -1,17 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/store";
-import { User, LogOut } from "lucide-react";
+import { User, LogOut, Menu, X } from "lucide-react";
 
 export default function Headers() {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { user, isAuthenticated, logout } = useAuthStore();
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const navItems = [
+    { label: "Beranda", href: "/" },
     { label: "Tentang Kami", href: "/about" },
     { label: "Pusat Bantuan", href: "/help" },
     { label: "Hubungi Kami", href: "/contact" },
@@ -24,8 +34,12 @@ export default function Headers() {
   };
 
   return (
-    <header className="w-full text-white relative z-50">
-      <nav className="w-full px-6 py-4 flex items-center justify-between">
+    <header className={`w-full text-white fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      scrolled 
+        ? "bg-[#011E55]/95 backdrop-blur-md shadow-lg py-3" 
+        : "bg-transparent py-4"
+    }`}>
+      <nav className="w-full px-6 flex items-center justify-between">
         <Link href="/" className="text-3xl font-bold tracking-tight hover:opacity-90 transition-opacity">
           KOSE
         </Link>
@@ -81,13 +95,7 @@ export default function Headers() {
             className="p-2 text-white"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {mobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </nav>
