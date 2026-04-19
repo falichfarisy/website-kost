@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect, useSyncExternalStore } from "react";
+import { useState, useRef, useSyncExternalStore } from "react";
 import Headers from "@/app/components/Headers";
 import Link from "next/link";
-import { useAuthStore } from "@/lib/store";
+
 import { ChevronRight, Star, MapPin, Building2, Home, Users, Heart, Shield } from "lucide-react";
 
 function useHydration() {
@@ -13,21 +13,6 @@ function useHydration() {
     () => false
   );
 }
-
-interface BannerSlide {
-  id: number;
-  title: string;
-  subtitle: string;
-  cta: string;
-  ctaLink: string;
-  bgGradient: string;
-}
-
-const bannerSlides: BannerSlide[] = [
-  { id: 1, title: "Promo Spesial", subtitle: "Diskon hingga 50% untuk kost baru", cta: "Lihat Promo", ctaLink: "/search?promo=true", bgGradient: "from-[#011E55] to-[#0a2d6e]" },
-  { id: 2, title: "Kost Terdekat Kampus", subtitle: "Temukan kost strategis di sekitar kampus", cta: "Cari Sekarang", ctaLink: "/search?location=kampus", bgGradient: "from-[#011E55] to-blue-600" },
-  { id: 3, title: "Kost Premium", subtitle: "Fasilitas lengkap, nyaman seperti rumah", cta: "Jelajahi", ctaLink: "/search?type=premium", bgGradient: "from-[#011E55] to-[#0a2d6e]" },
-];
 
 const featuredKos = [
   { id: 1, name: "Kost Mahkota Regency", location: "Malang - Signature", price: 1200000, rating: 4.8, reviews: 124, type: "Putra", badge: "Terpopuler" },
@@ -67,15 +52,7 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [kosType, setKosType] = useState("all");
   const [priceRange, setPriceRange] = useState("all");
-  const [currentBanner, setCurrentBanner] = useState(0);
   const featuredScrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentBanner((prev) => (prev + 1) % bannerSlides.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
 
   const featuredScroll = (direction: "left" | "right") => {
     if (featuredScrollRef.current) {
@@ -92,7 +69,6 @@ export default function HomePage() {
     window.location.href = `/search?${params.toString()}`;
   };
 
-  const { isAuthenticated } = useAuthStore();
   const isHydrated = useHydration();
 
   if (!isHydrated) {
