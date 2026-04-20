@@ -49,14 +49,20 @@ export default function BookingModal({ isOpen, onClose, kosId, kosName, price }:
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
       
-      <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div 
+          className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="booking-modal-title"
+        >
         <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+          <h2 id="booking-modal-title" className="text-xl font-bold text-gray-900 dark:text-white">
             {success ? 'Booking Berhasil!' : 'Booking Kost'}
           </h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+            aria-label="Tutup modal"
           >
             <X className="w-5 h-5 text-gray-500" />
           </button>
@@ -96,12 +102,14 @@ export default function BookingModal({ isOpen, onClose, kosId, kosName, price }:
                   Nama Lengkap
                 </label>
                 <input
+                  id="tenant_name"
                   type="text"
                   required
                   value={formData.tenant_name}
                   onChange={(e) => setFormData({ ...formData, tenant_name: e.target.value })}
                   className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#011E55] dark:text-white"
                   placeholder="Masukkan nama lengkap"
+                  aria-label="Nama lengkap penyewa"
                 />
               </div>
 
@@ -111,12 +119,14 @@ export default function BookingModal({ isOpen, onClose, kosId, kosName, price }:
                   Email
                 </label>
                 <input
+                  id="tenant_email"
                   type="email"
                   required
                   value={formData.tenant_email}
                   onChange={(e) => setFormData({ ...formData, tenant_email: e.target.value })}
                   className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#011E55] dark:text-white"
                   placeholder="email@contoh.com"
+                  aria-label="Email penyewa"
                 />
               </div>
 
@@ -126,12 +136,14 @@ export default function BookingModal({ isOpen, onClose, kosId, kosName, price }:
                   Nomor WhatsApp
                 </label>
                 <input
+                  id="tenant_phone"
                   type="tel"
                   required
                   value={formData.tenant_phone}
                   onChange={(e) => setFormData({ ...formData, tenant_phone: e.target.value })}
                   className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#011E55] dark:text-white"
                   placeholder="08xxxxxxxxxx"
+                  aria-label="Nomor WhatsApp"
                 />
               </div>
 
@@ -142,12 +154,14 @@ export default function BookingModal({ isOpen, onClose, kosId, kosName, price }:
                     Tanggal Masuk
                   </label>
                   <input
+                    id="check_in_date"
                     type="date"
                     required
                     min={new Date().toISOString().split('T')[0]}
                     value={formData.check_in_date}
                     onChange={(e) => setFormData({ ...formData, check_in_date: e.target.value })}
                     className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#011E55] dark:text-white"
+                    aria-label="Tanggal masuk"
                   />
                 </div>
                 <div>
@@ -156,9 +170,11 @@ export default function BookingModal({ isOpen, onClose, kosId, kosName, price }:
                     Durasi (Bulan)
                   </label>
                   <select
+                    id="duration_months"
                     value={formData.duration_months}
                     onChange={(e) => setFormData({ ...formData, duration_months: parseInt(e.target.value) })}
                     className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#011E55] dark:text-white"
+                    aria-label="Durasi penyewaan dalam bulan"
                   >
                     {[1, 2, 3, 6, 12].map((m) => (
                       <option key={m} value={m}>{m} bulan</option>
@@ -173,11 +189,13 @@ export default function BookingModal({ isOpen, onClose, kosId, kosName, price }:
                   Catatan (Opsional)
                 </label>
                 <textarea
+                  id="tenant_notes"
                   value={formData.tenant_notes}
                   onChange={(e) => setFormData({ ...formData, tenant_notes: e.target.value })}
                   className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#011E55] dark:text-white"
                   rows={3}
                   placeholder="Ceritakan tentang dirimu, kapan mau参观, dll"
+                  aria-label="Catatan tambahan"
                 />
               </div>
 
@@ -207,7 +225,7 @@ export default function BookingModal({ isOpen, onClose, kosId, kosName, price }:
               </button>
 
               {createBooking.isError && (
-                <p className="text-red-500 text-sm text-center">
+                <p className="text-red-500 text-sm text-center" role="alert">
                   Terjadi kesalahan. Silakan coba lagi.
                 </p>
               )}

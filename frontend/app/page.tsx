@@ -81,7 +81,7 @@ export default function HomePage() {
         <Headers />
       </header>
 
-      <div className="relative h-[560px] overflow-hidden">
+      <div className="relative h-170 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#011E55] via-[#0a2d6e] to-[#1a4a8a]" />
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/5 rounded-full blur-3xl" />
@@ -121,7 +121,7 @@ export default function HomePage() {
           </div>
         </div>
         
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-24" />
       </div>
 
       <div className="relative -mt-8 z-20 px-4">

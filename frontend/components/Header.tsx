@@ -107,6 +107,14 @@ export function Header() {
             <button
               className="md:hidden p-2 rounded-xl bg-gray-100 dark:bg-gray-800"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  setMobileMenuOpen(!mobileMenuOpen);
+                }
+              }}
+              aria-label={mobileMenuOpen ? 'Tutup menu' : 'Buka menu'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -114,7 +122,7 @@ export function Header() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200 dark:border-gray-800 animate-slide-up">
+          <div id="mobile-menu" className="md:hidden py-4 border-t border-gray-200 dark:border-gray-800 animate-slide-up">
             <nav className="flex flex-col gap-2">
               <Link 
                 href="/search" 

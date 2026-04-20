@@ -235,17 +235,21 @@ function SearchContent() {
           
           <div className="flex flex-wrap gap-4">
             <input
+              id="search"
               type="text"
-              placeholder="Cari nama kos atau lokasi..."
+              placeholder="Cari nama kos atau lokasi…"
               value={filters.search}
               onChange={(e) => handleFilterChange('search', e.target.value)}
               className="flex-1 min-w-[200px] px-4 py-2 text-gray-800 rounded-lg"
+              aria-label="Cari berdasarkan nama kos atau lokasi"
             />
             
             <select
+              id="type"
               value={filters.type}
               onChange={(e) => handleFilterChange('type', e.target.value)}
               className="px-4 py-2 text-gray-800 rounded-lg"
+              aria-label="Filter berdasarkan tipe kost"
             >
               <option value="">Semua Tipe</option>
               <option value="putra">Putra</option>
@@ -254,25 +258,31 @@ function SearchContent() {
             </select>
 
             <input
+              id="min_price"
               type="number"
               placeholder="Min Harga"
               value={filters.min_price || ''}
               onChange={(e) => handleFilterChange('min_price', e.target.value)}
               className="w-32 px-4 py-2 text-gray-800 rounded-lg"
+              aria-label="Filter harga minimum"
             />
 
             <input
+              id="max_price"
               type="number"
               placeholder="Max Harga"
               value={filters.max_price || ''}
               onChange={(e) => handleFilterChange('max_price', e.target.value)}
               className="w-32 px-4 py-2 text-gray-800 rounded-lg"
+              aria-label="Filter harga maksimum"
             />
 
             <select
+              id="min_rating"
               value={filters.min_rating ? String(filters.min_rating) : ''}
               onChange={(e) => handleFilterChange('min_rating', e.target.value)}
               className="px-4 py-2 text-gray-800 rounded-lg"
+              aria-label="Filter berdasarkan rating minimum"
             >
               <option value="">Semua Rating</option>
               <option value="4">4+ Bintang</option>

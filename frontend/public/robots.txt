@@ -1,0 +1,7 @@
+# https://www.robotstxt.org/
+# https://searchgoogle.com/not-found?archive=
+
+User-agent: *
+Allow: /
+
+Sitemap: https://kose.my.id/sitemap.xml
