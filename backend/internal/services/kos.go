@@ -33,19 +33,24 @@ func (s *KosService) GetAllKos(filters models.KosFilters) ([]models.Kos, int64, 
 	query := s.db.Model(&models.Kos{}).Where("available_rooms > 0")
 
 	if filters.MinPrice > 0 {
-		query = query.Where("price >= ?", filters.MinPrice)
+		query = query.Where("kos.price >= ?", filters.MinPrice)
 	}
 	if filters.MaxPrice > 0 {
-		query = query.Where("price <= ?", filters.MaxPrice)
+		query = query.Where("kos.price <= ?", filters.MaxPrice)
 	}
 	if filters.KosType != "" {
-		query = query.Where("kos_type = ?", filters.KosType)
+		query = query.Where("kos.kos_type = ?", filters.KosType)
 	}
 	if filters.MinRating > 0 {
-		query = query.Where("rating >= ?", filters.MinRating)
+		query = query.Where("kos.rating >= ?", filters.MinRating)
 	}
 	if filters.Search != "" {
-		query = query.Where("name ILIKE ? OR address ILIKE ?", "%"+filters.Search+"%", "%"+filters.Search+"%")
+		query = query.Where("kos.name ILIKE ? OR kos.address ILIKE ?", "%"+filters.Search+"%", "%"+filters.Search+"%")
+	}
+	if filters.Facility != "" {
+		query = query.Joins("JOIN kos_facilities ON kos_facilities.kos_id = kos.id").
+			Joins("JOIN facilities ON facilities.id = kos_facilities.facility_id").
+			Where("facilities.name ILIKE ?", "%"+filters.Facility+"%")
 	}
 
 	query.Count(&total)

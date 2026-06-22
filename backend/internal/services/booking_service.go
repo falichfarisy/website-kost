@@ -146,11 +146,17 @@ func (s *BookingService) ApproveBooking(bookingID, ownerID uint) error {
 		return ErrInvalidStatus
 	}
 
+	if booking.Kos.AvailableRooms <= 0 {
+		return ErrNoRoomsAvailable
+	}
+
 	if err := s.bookingRepo.Approve(bookingID, ownerID); err != nil {
 		return err
 	}
 
 	if err := s.bookingRepo.DecrementAvailableRooms(booking.KosID); err != nil {
+		// Log the error in a real app, here we return it to avoid silently failing
+		return err
 	}
 
 	s.createBookingApprovedNotification(booking)
