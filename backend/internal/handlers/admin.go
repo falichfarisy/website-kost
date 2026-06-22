@@ -46,13 +46,19 @@ func (h *AdminHandler) CreateKos(c *gin.Context) {
 	}
 
 	userID, _ := c.Get("user_id")
+	kosType := models.KosType(req.KosType)
+	if kosType != models.KosTypePutra && kosType != models.KosTypePutri && kosType != models.KosTypeCampur {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid kos type"})
+		return
+	}
+
 	kos := &models.Kos{
 		Name:           req.Name,
 		Description:    req.Description,
 		Address:        req.Address,
 		Latitude:       req.Latitude,
 		Longitude:      req.Longitude,
-		KosType:        models.KosType(req.KosType),
+		KosType:        kosType,
 		Price:          req.Price,
 		PriceType:      req.PriceType,
 		Area:           req.Area,
@@ -89,19 +95,19 @@ func (h *AdminHandler) UpdateKos(c *gin.Context) {
 	}
 
 	var req struct {
-		Name           string  `json:"name"`
-		Description    string  `json:"description"`
-		Address        string  `json:"address"`
-		Latitude       float64 `json:"latitude"`
-		Longitude      float64 `json:"longitude"`
-		KosType        string  `json:"kos_type"`
-		Price          int     `json:"price"`
-		PriceType      string  `json:"price_type"`
-		Area           float64 `json:"area"`
-		Capacity       int     `json:"capacity"`
-		AvailableRooms int     `json:"available_rooms"`
-		FacilityIDs    []uint  `json:"facility_ids"`
-		LocationID     *uint   `json:"location_id"`
+		Name           *string  `json:"name"`
+		Description    *string  `json:"description"`
+		Address        *string  `json:"address"`
+		Latitude       *float64 `json:"latitude"`
+		Longitude      *float64 `json:"longitude"`
+		KosType        *string  `json:"kos_type"`
+		Price          *int     `json:"price"`
+		PriceType      *string  `json:"price_type"`
+		Area           *float64 `json:"area"`
+		Capacity       *int     `json:"capacity"`
+		AvailableRooms *int     `json:"available_rooms"`
+		FacilityIDs    []uint   `json:"facility_ids"`
+		LocationID     *uint    `json:"location_id"`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -109,26 +115,46 @@ func (h *AdminHandler) UpdateKos(c *gin.Context) {
 		return
 	}
 
-	if req.Name != "" {
-		existingKos.Name = req.Name
+	if req.Name != nil {
+		existingKos.Name = *req.Name
 	}
-	if req.Description != "" {
-		existingKos.Description = req.Description
+	if req.Description != nil {
+		existingKos.Description = *req.Description
 	}
-	if req.Address != "" {
-		existingKos.Address = req.Address
+	if req.Address != nil {
+		existingKos.Address = *req.Address
 	}
-	if req.KosType != "" {
-		existingKos.KosType = models.KosType(req.KosType)
+	if req.Latitude != nil {
+		existingKos.Latitude = *req.Latitude
 	}
-	if req.Price > 0 {
-		existingKos.Price = req.Price
+	if req.Longitude != nil {
+		existingKos.Longitude = *req.Longitude
 	}
-	if req.PriceType != "" {
-		existingKos.PriceType = req.PriceType
+	if req.KosType != nil {
+		kosType := models.KosType(*req.KosType)
+		if kosType != models.KosTypePutra && kosType != models.KosTypePutri && kosType != models.KosTypeCampur {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid kos type"})
+			return
+		}
+		existingKos.KosType = kosType
 	}
-	if req.AvailableRooms > 0 {
-		existingKos.AvailableRooms = req.AvailableRooms
+	if req.Price != nil {
+		existingKos.Price = *req.Price
+	}
+	if req.PriceType != nil {
+		existingKos.PriceType = *req.PriceType
+	}
+	if req.Area != nil {
+		existingKos.Area = *req.Area
+	}
+	if req.Capacity != nil {
+		existingKos.Capacity = *req.Capacity
+	}
+	if req.AvailableRooms != nil {
+		existingKos.AvailableRooms = *req.AvailableRooms
+	}
+	if req.LocationID != nil {
+		existingKos.LocationID = req.LocationID
 	}
 
 	if req.FacilityIDs != nil {
@@ -184,7 +210,13 @@ func (h *AdminHandler) UpdateUserRole(c *gin.Context) {
 		return
 	}
 
-	if err := h.userService.UpdateUserRole(uint(id), models.UserRole(req.Role)); err != nil {
+	role := models.UserRole(req.Role)
+	if role != models.RoleUser && role != models.RoleAdmin && role != models.RoleOwner {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid role"})
+		return
+	}
+
+	if err := h.userService.UpdateUserRole(uint(id), role); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user role"})
 		return
 	}

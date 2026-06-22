@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -142,7 +143,22 @@ func (h *AuthHandler) Refresh(c *gin.Context) {
 }
 
 func (h *AuthHandler) generateToken(userID uint, email, role, secret, expiry string) (string, error) {
-	duration, _ := time.ParseDuration(expiry)
+	// Custom parsing for 'd' unit since time.ParseDuration doesn't support it
+	var duration time.Duration
+	if len(expiry) > 1 && expiry[len(expiry)-1] == 'd' {
+		days, err := strconv.Atoi(expiry[:len(expiry)-1])
+		if err != nil {
+			return "", err
+		}
+		duration = time.Duration(days) * 24 * time.Hour
+	} else {
+		var err error
+		duration, err = time.ParseDuration(expiry)
+		if err != nil {
+			return "", err
+		}
+	}
+
 	claims := &middleware.Claims{
 		UserID: userID,
 		Email:  email,

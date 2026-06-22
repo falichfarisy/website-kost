@@ -12,6 +12,7 @@ type UserRole string
 const (
 	RoleUser  UserRole = "user"
 	RoleAdmin UserRole = "admin"
+	RoleOwner UserRole = "owner"
 )
 
 // Kos Type enum
