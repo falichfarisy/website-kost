@@ -9,11 +9,13 @@ import (
 
 type CronService struct {
 	bookingRepo *repositories.BookingRepository
+	stopCh      chan struct{}
 }
 
 func NewCronService(bookingRepo *repositories.BookingRepository) *CronService {
 	return &CronService{
 		bookingRepo: bookingRepo,
+		stopCh:      make(chan struct{}),
 	}
 }
 
@@ -23,12 +25,22 @@ func (s *CronService) Start() {
 	log.Println("[Cron] Cron service started")
 }
 
+func (s *CronService) Stop() {
+	close(s.stopCh)
+	log.Println("[Cron] Cron service stopped")
+}
+
 func (s *CronService) runBookingExpirationChecker() {
 	ticker := time.NewTicker(1 * time.Hour)
 	defer ticker.Stop()
 
-	for range ticker.C {
-		s.checkAndExpireBookings()
+	for {
+		select {
+		case <-ticker.C:
+			s.checkAndExpireBookings()
+		case <-s.stopCh:
+			return
+		}
 	}
 }
 
@@ -36,8 +48,13 @@ func (s *CronService) runCheckInReminderChecker() {
 	ticker := time.NewTicker(1 * time.Hour)
 	defer ticker.Stop()
 
-	for range ticker.C {
-		s.sendCheckInReminders()
+	for {
+		select {
+		case <-ticker.C:
+			s.sendCheckInReminders()
+		case <-s.stopCh:
+			return
+		}
 	}
 }
 

@@ -142,7 +142,7 @@ func main() {
 	}
 
 	// Initialize and start cron service
-	cronService := services.NewCronService(db, bookingRepo, notificationService)
+	cronService := services.NewCronService(bookingRepo)
 	cronService.Start()
 
 	srv := &http.Server{
