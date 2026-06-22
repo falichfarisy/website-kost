@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -19,7 +20,7 @@ type Config struct {
 	JWTExpiry      string
 	RefreshSecret  string
 	RefreshExpiry  string
-	AllowedOrigins string
+	AllowedOrigins []string
 }
 
 func Load() *Config {
@@ -38,8 +39,16 @@ func Load() *Config {
 		JWTExpiry:      getEnv("JWT_EXPIRY", "24h"),
 		RefreshSecret:  getEnv("REFRESH_SECRET", "your-refresh-secret-key-change-in-production"),
 		RefreshExpiry:  getEnv("REFRESH_TOKEN_EXPIRY", "7d"),
-		AllowedOrigins: getEnv("ALLOWED_ORIGINS", "http://localhost:3000"),
+		AllowedOrigins: splitOrigins(getEnv("ALLOWED_ORIGINS", "http://localhost:3000")),
 	}
+}
+
+func splitOrigins(originsStr string) []string {
+	var origins []string
+	for _, o := range strings.Split(originsStr, ",") {
+		origins = append(origins, strings.TrimSpace(o))
+	}
+	return origins
 }
 
 func (c *Config) GetDSN() string {

@@ -64,7 +64,21 @@ func AdminMiddleware() gin.HandlerFunc {
 
 func CORSMiddleware(cfg *config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", cfg.AllowedOrigins)
+		origin := c.Request.Header.Get("Origin")
+		allowedOrigin := ""
+		
+		for _, o := range cfg.AllowedOrigins {
+			if o == origin || o == "*" {
+				allowedOrigin = origin
+				break
+			}
+		}
+
+		if allowedOrigin == "" && len(cfg.AllowedOrigins) > 0 {
+			allowedOrigin = cfg.AllowedOrigins[0]
+		}
+
+		c.Header("Access-Control-Allow-Origin", allowedOrigin)
 		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization")
 		c.Header("Access-Control-Allow-Credentials", "true")
