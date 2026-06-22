@@ -16,14 +16,18 @@ export const useThemeStore = create<ThemeState>()(
     (set, get) => ({
       theme: 'light',
       setTheme: (theme) => {
-        document.documentElement.classList.remove('light', 'dark');
-        document.documentElement.classList.add(theme);
+        if (typeof window !== 'undefined') {
+          document.documentElement.classList.remove('light', 'dark');
+          document.documentElement.classList.add(theme);
+        }
         set({ theme });
       },
       toggleTheme: () => {
         const newTheme = get().theme === 'light' ? 'dark' : 'light';
-        document.documentElement.classList.remove('light', 'dark');
-        document.documentElement.classList.add(newTheme);
+        if (typeof window !== 'undefined') {
+          document.documentElement.classList.remove('light', 'dark');
+          document.documentElement.classList.add(newTheme);
+        }
         set({ theme: newTheme });
       },
     }),

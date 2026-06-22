@@ -6,6 +6,7 @@ import api from '@/lib/api';
 import { Notification } from '@/lib/types';
 import { Bell, Check, CheckCheck, X, Clock, CheckCircle, XCircle, Calendar } from 'lucide-react';
 import Link from 'next/link';
+import { useAuthStore } from '@/lib/store';
 
 const typeConfig: Record<string, { icon: any; color: string; bg: string }> = {
   booking_request: { icon: Clock, color: 'text-blue-600', bg: 'bg-blue-100 dark:bg-blue-900/30' },
@@ -24,16 +25,19 @@ export default function NotificationBell({ className = '' }: NotificationBellPro
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
 
+  const { isAuthenticated } = useAuthStore();
+
   const { data: countData } = useQuery({
     queryKey: ['notifications', 'unread-count'],
     queryFn: () => api.get('/notifications/unread/count').then(res => res.data),
     refetchInterval: 30000,
+    enabled: isAuthenticated,
   });
 
   const { data: notificationsData, isLoading } = useQuery({
     queryKey: ['notifications', 'list'],
     queryFn: () => api.get('/notifications', { params: { limit: 10 } }).then(res => res.data),
-    enabled: isOpen,
+    enabled: isOpen && isAuthenticated,
   });
 
   const markReadMutation = useMutation({

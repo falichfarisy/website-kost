@@ -21,7 +21,6 @@ export interface Kos {
   available_rooms: number;
   rating: number;
   review_count?: number;
-  reviews_count?: number;
   source?: 'manual' | 'scraped';
   location_id?: number;
   location?: Location;
@@ -49,14 +48,6 @@ export interface KosImage {
   kos_id: number;
   url: string;
   is_primary: boolean;
-}
-
-export interface Location {
-  id?: number;
-  province?: string;
-  city?: string;
-  district: string;
-  subdistrict?: string;
 }
 
 export interface Review {
