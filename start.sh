@@ -6,12 +6,12 @@ echo "Starting frontend and backend..."
 
 # Start backend in background
 echo "Starting backend..."
-cd backend && npm start &
+(cd backend && go run ./cmd/server) &
 BACKEND_PID=$!
 
 # Start frontend in background
 echo "Starting frontend..."
-cd ../frontend && npm run dev &
+(cd frontend && npm run dev) &
 FRONTEND_PID=$!
 
 # Function to kill processes on exit
@@ -25,7 +25,7 @@ cleanup() {
 trap cleanup SIGINT SIGTERM
 
 echo "Frontend running on http://localhost:3000"
-echo "Backend running on http://localhost:3001"
+echo "Backend API (Go)    : http://localhost:8080"
 echo "Press Ctrl+C to stop both services"
 
 # Wait for both processes
