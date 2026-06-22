@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import api from '@/lib/api';
 import { X, Calendar, Clock, User, Mail, Phone, FileText, CheckCircle } from 'lucide-react';
@@ -23,6 +23,21 @@ export default function BookingModal({ isOpen, onClose, kosId, kosName, price }:
     duration_months: 1,
   });
   const [success, setSuccess] = useState(false);
+
+  // Reset form when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({
+        tenant_name: '',
+        tenant_email: '',
+        tenant_phone: '',
+        tenant_notes: '',
+        check_in_date: '',
+        duration_months: 1,
+      });
+      setSuccess(false);
+    }
+  }, [isOpen]);
 
   const createBooking = useMutation({
     mutationFn: (data: typeof formData) => 
@@ -194,7 +209,7 @@ export default function BookingModal({ isOpen, onClose, kosId, kosName, price }:
                   onChange={(e) => setFormData({ ...formData, tenant_notes: e.target.value })}
                   className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#011E55] dark:text-white"
                   rows={3}
-                  placeholder="Ceritakan tentang dirimu, kapan mau参观, dll"
+                  placeholder="Ceritakan tentang dirimu, kapan mau survey, dll"
                   aria-label="Catatan tambahan"
                 />
               </div>
