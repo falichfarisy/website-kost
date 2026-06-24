@@ -20,18 +20,16 @@ type Claims struct {
 
 func AuthMiddleware(cfg *config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		authHeader := c.GetHeader("Authorization")
-		if authHeader == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header required"})
-			c.Abort()
-			return
-		}
-
-		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
-		if tokenString == authHeader {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Bearer token required"})
-			c.Abort()
-			return
+		tokenString := strings.TrimPrefix(c.GetHeader("Authorization"), "Bearer ")
+		if tokenString == "" || tokenString == c.GetHeader("Authorization") {
+			// Fallback to httpOnly cookie
+			cookie, err := c.Cookie("access_token")
+			if err != nil || cookie == "" {
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header or cookie required"})
+				c.Abort()
+				return
+			}
+			tokenString = cookie
 		}
 
 		claims := &Claims{}

@@ -14,6 +14,69 @@ import (
 	"kose-backend/internal/services"
 )
 
+func parseDuration(expiry string) time.Duration {
+	var d time.Duration
+	if len(expiry) > 1 && expiry[len(expiry)-1] == 'd' {
+		days, err := strconv.Atoi(expiry[:len(expiry)-1])
+		if err != nil {
+			return 24 * time.Hour
+		}
+		d = time.Duration(days) * 24 * time.Hour
+	} else {
+		var err error
+		d, err = time.ParseDuration(expiry)
+		if err != nil {
+			return 24 * time.Hour
+		}
+	}
+	return d
+}
+
+func setTokenCookies(c *gin.Context, accessToken, refreshToken, accessExpiry, refreshExpiry string) {
+	accessMaxAge := int(parseDuration(accessExpiry).Seconds())
+	refreshMaxAge := int(parseDuration(refreshExpiry).Seconds())
+	secure := c.Request.TLS != nil
+
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "access_token",
+		Value:    accessToken,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   secure,
+		SameSite: http.SameSiteStrictMode,
+		MaxAge:   accessMaxAge,
+	})
+
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    refreshToken,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   secure,
+		SameSite: http.SameSiteStrictMode,
+		MaxAge:   refreshMaxAge,
+	})
+}
+
+func clearTokenCookies(c *gin.Context) {
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "access_token",
+		Value:    "",
+		Path:     "/",
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+		MaxAge:   -1,
+	})
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    "",
+		Path:     "/",
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+		MaxAge:   -1,
+	})
+}
+
 type AuthHandler struct {
 	userService *services.UserService
 	cfg         *config.Config
@@ -101,6 +164,8 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
+	setTokenCookies(c, accessToken, refreshToken, h.cfg.JWTExpiry, h.cfg.RefreshExpiry)
+
 	c.JSON(http.StatusOK, gin.H{
 		"access_token":  accessToken,
 		"refresh_token": refreshToken,
@@ -145,6 +210,8 @@ func (h *AuthHandler) Refresh(c *gin.Context) {
 		return
 	}
 
+	setTokenCookies(c, newAccessToken, req.RefreshToken, h.cfg.JWTExpiry, h.cfg.RefreshExpiry)
+
 	c.JSON(http.StatusOK, gin.H{"access_token": newAccessToken})
 }
 
@@ -177,6 +244,11 @@ func (h *AuthHandler) generateToken(userID uint, email, role, secret, expiry str
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(secret))
+}
+
+func (h *AuthHandler) Logout(c *gin.Context) {
+	clearTokenCookies(c)
+	c.JSON(http.StatusOK, gin.H{"message": "Logged out"})
 }
 
 func (h *AuthHandler) GetMe(c *gin.Context) {
