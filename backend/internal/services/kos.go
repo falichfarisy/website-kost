@@ -64,13 +64,20 @@ func (s *KosService) GetAllKos(filters models.KosFilters) ([]models.Kos, int64, 
 	return kosList, total, err
 }
 
-func (s *KosService) SearchKos(query string) ([]models.Kos, error) {
+func (s *KosService) GetAllKosAdmin(page, limit int) ([]models.Kos, int64, error) {
 	var kosList []models.Kos
-	err := s.db.Where("name ILIKE ? OR address ILIKE ?", "%"+query+"%", "%"+query+"%").
-		Preload("Facilities").Preload("Images").
-		Limit(20).
+	var total int64
+
+	query := s.db.Model(&models.Kos{})
+	query.Count(&total)
+
+	offset := (page - 1) * limit
+	err := query.Preload("Facilities").Preload("Images").
+		Order("created_at DESC").
+		Limit(limit).Offset(offset).
 		Find(&kosList).Error
-	return kosList, err
+
+	return kosList, total, err
 }
 
 func (s *KosService) UpdateKos(kos *models.Kos) error {

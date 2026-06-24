@@ -85,7 +85,6 @@ func main() {
 		kos := api.Group("/kos")
 		{
 			kos.GET("", kosHandler.GetAll)
-			kos.GET("/search", kosHandler.Search)
 			kos.GET("/:id", kosHandler.GetByID)
 			kos.GET("/:id/reviews", reviewHandler.GetByKosID)
 		}
@@ -137,6 +136,7 @@ func main() {
 		admin := api.Group("/admin")
 		admin.Use(middleware.AuthMiddleware(cfg), middleware.AdminMiddleware())
 		{
+			admin.GET("/kos", adminHandler.GetAllKos)
 			admin.POST("/kos", adminHandler.CreateKos)
 			admin.PUT("/kos/:id", adminHandler.UpdateKos)
 			admin.DELETE("/kos/:id", adminHandler.DeleteKos)
