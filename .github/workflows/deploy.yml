@@ -15,11 +15,16 @@ jobs:
         with:
           persist-credentials: true
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
 
       - name: Deploy to Production
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKENS }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         working-directory: ./frontend
         run: vercel --prod --yes

@@ -13,9 +13,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
 
       - name: Deploy to Staging
         working-directory: ./frontend
-        run: vercel --yes --token=${{ secrets.VERCEL_TOKENS }}
+        run: vercel --yes --token=${{ secrets.VERCEL_TOKEN }}
