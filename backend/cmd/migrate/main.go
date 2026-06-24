@@ -16,12 +16,17 @@ func main() {
 	dbHost := getEnv("DB_HOST", "localhost")
 	dbPort := getEnv("DB_PORT", "5432")
 	dbUser := getEnv("DB_USER", "postgres")
-	dbPassword := getEnv("DB_PASSWORD", "password")
+	dbPassword := getEnv("DB_PASSWORD", "")
 	dbName := getEnv("DB_NAME", "kose")
+	sslMode := getEnv("DB_SSLMODE", "disable")
+
+	if dbPassword == "" {
+		log.Fatal("DB_PASSWORD must be set in environment")
+	}
 
 	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Jakarta",
-		dbHost, dbUser, dbPassword, dbName, dbPort,
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=Asia/Jakarta",
+		dbHost, dbUser, dbPassword, dbName, dbPort, sslMode,
 	)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})

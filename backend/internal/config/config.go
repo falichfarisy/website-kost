@@ -28,19 +28,25 @@ func Load() *Config {
 		log.Println("No .env file found, using system environment variables")
 	}
 
-	return &Config{
+	cfg := &Config{
 		Port:           getEnv("PORT", "8080"),
 		DBHost:         getEnv("DB_HOST", "localhost"),
 		DBPort:         getEnv("DB_PORT", "5432"),
 		DBUser:         getEnv("DB_USER", "postgres"),
-		DBPassword:     getEnv("DB_PASSWORD", "password"),
+		DBPassword:     getEnv("DB_PASSWORD", ""),
 		DBName:         getEnv("DB_NAME", "kose"),
-		JWTSecret:      getEnv("JWT_SECRET", "your-secret-key-change-in-production"),
+		JWTSecret:      getEnv("JWT_SECRET", ""),
 		JWTExpiry:      getEnv("JWT_EXPIRY", "24h"),
-		RefreshSecret:  getEnv("REFRESH_SECRET", "your-refresh-secret-key-change-in-production"),
+		RefreshSecret:  getEnv("REFRESH_SECRET", ""),
 		RefreshExpiry:  getEnv("REFRESH_TOKEN_EXPIRY", "7d"),
 		AllowedOrigins: splitOrigins(getEnv("ALLOWED_ORIGINS", "http://localhost:3000")),
 	}
+
+	if cfg.JWTSecret == "" || cfg.RefreshSecret == "" {
+		log.Fatal("JWT_SECRET and REFRESH_SECRET must be set in environment")
+	}
+
+	return cfg
 }
 
 func splitOrigins(originsStr string) []string {
@@ -52,9 +58,10 @@ func splitOrigins(originsStr string) []string {
 }
 
 func (c *Config) GetDSN() string {
+	sslMode := getEnv("DB_SSLMODE", "disable")
 	return fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Jakarta",
-		c.DBHost, c.DBUser, c.DBPassword, c.DBName, c.DBPort,
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=Asia/Jakarta",
+		c.DBHost, c.DBUser, c.DBPassword, c.DBName, c.DBPort, sslMode,
 	)
 }
 

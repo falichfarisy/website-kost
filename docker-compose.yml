@@ -4,7 +4,7 @@ services:
     container_name: kose-postgres
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set}
       POSTGRES_DB: kose
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -29,11 +29,11 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USER: postgres
-      DB_PASSWORD: password
+      DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set}
       DB_NAME: kose
-      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set}
       JWT_EXPIRY: 24h
-      REFRESH_SECRET: ${REFRESH_SECRET:-your-super-secret-refresh-key-change-in-production}
+      REFRESH_SECRET: ${REFRESH_SECRET:?REFRESH_SECRET must be set}
       REFRESH_TOKEN_EXPIRY: 7d
       ALLOWED_ORIGINS: http://localhost:3000,http://frontend:3000
     depends_on:
