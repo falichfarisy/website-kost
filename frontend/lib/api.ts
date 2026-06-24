@@ -7,9 +7,13 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {
+  // ponytail: Authorization header kept for backward compat;
+  // httpOnly cookie sent automatically by browser.
+  // Remove localStorage reads once backend cookie path fully rolled out.
   if (typeof window !== 'undefined') {
     const token = localStorage.getItem('access_token');
     if (token) {
