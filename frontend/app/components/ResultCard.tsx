@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 type ResultProps = {
+  id: number;
   category: "putra" | "putri" | "campur";
   location: string;
   nameKos: string;
@@ -10,7 +11,7 @@ type ResultProps = {
   slotRoom: number;
 };
 
-export default function ResultCard({ category, location, nameKos, fasility, price, slotRoom }: ResultProps) {
+export default function ResultCard({ id, category, location, nameKos, fasility, price, slotRoom }: ResultProps) {
   const upperLocation = location.toUpperCase();
   const priceNominal = "Rp" + price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
@@ -27,7 +28,7 @@ export default function ResultCard({ category, location, nameKos, fasility, pric
   };
 
   return (
-    <Link href={`/kos/1`} className="block group">
+    <Link href={`/kos/${id}`} className="block group">
       <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow transition-transform duration-300 transform hover:-translate-y-1">
         <div className="relative h-48 bg-gray-100 group-hover:brightness-105 transition-filter duration-300">
           <Image

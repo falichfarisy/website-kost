@@ -72,19 +72,23 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
                 
                 {showRoleMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
-                    <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                      <p className="text-xs text-gray-500">Switch Role (Dev)</p>
-                    </div>
-                    <button onClick={() => { setRole('user'); setShowRoleMenu(false); }} className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700">
-                      User
-                    </button>
-                    <button onClick={() => { setRole('admin'); setShowRoleMenu(false); router.push('/admin'); }} className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700">
-                      Admin
-                    </button>
-                    <button onClick={() => { setRole('owner'); setShowRoleMenu(false); router.push('/owner'); }} className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700">
-                      Owner
-                    </button>
-                    <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
+                    {process.env.NODE_ENV === 'development' && (
+                      <>
+                        <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+                          <p className="text-xs text-gray-500">Switch Role (Dev)</p>
+                        </div>
+                        <button onClick={() => { setRole('user'); setShowRoleMenu(false); }} className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700">
+                          User
+                        </button>
+                        <button onClick={() => { setRole('admin'); setShowRoleMenu(false); router.push('/admin'); }} className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700">
+                          Admin
+                        </button>
+                        <button onClick={() => { setRole('owner'); setShowRoleMenu(false); router.push('/owner'); }} className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700">
+                          Owner
+                        </button>
+                      </>
+                    )}
+                    <div className={process.env.NODE_ENV === 'development' ? 'border-t border-gray-200 dark:border-gray-700 mt-2 pt-2' : ''}>
                       <button onClick={handleLogout} className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 flex items-center gap-2">
                         <LogOut className="w-4 h-4" />
                         Logout

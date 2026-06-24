@@ -9,6 +9,7 @@ import { Kos, Facility } from '@/lib/types';
 
 export default function AdminKosPage() {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const { user } = useAuthStore();
   const [showForm, setShowForm] = useState(false);
   const [editingKos, setEditingKos] = useState<Kos | null>(null);
@@ -118,7 +119,13 @@ export default function AdminKosPage() {
     setShowForm(true);
   };
 
-  if (user?.role !== 'admin') return null;
+  if (user?.role !== 'admin') {
+    // SSR guard - redirect in browser
+    if (typeof window !== 'undefined') {
+      router.push('/login');
+    }
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

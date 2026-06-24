@@ -82,6 +82,7 @@ export default function FavoritesPage() {
                 <div key={kos.id} className="relative group">
                   <Link href={`/kos/${kos.id}`}>
                     <ResultCard
+                      id={kos.id}
                       category={kos.kos_type}
                       location={kos.location?.district || kos.address}
                       nameKos={kos.name}
