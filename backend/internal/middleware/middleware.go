@@ -3,6 +3,8 @@ package middleware
 import (
 	"net/http"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -66,7 +68,7 @@ func CORSMiddleware(cfg *config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		origin := c.Request.Header.Get("Origin")
 		allowedOrigin := ""
-		
+
 		for _, o := range cfg.AllowedOrigins {
 			if o == origin || o == "*" {
 				allowedOrigin = origin
@@ -74,8 +76,9 @@ func CORSMiddleware(cfg *config.Config) gin.HandlerFunc {
 			}
 		}
 
-		if allowedOrigin == "" && len(cfg.AllowedOrigins) > 0 {
-			allowedOrigin = cfg.AllowedOrigins[0]
+		if allowedOrigin == "" {
+			c.AbortWithStatus(http.StatusForbidden)
+			return
 		}
 
 		c.Header("Access-Control-Allow-Origin", allowedOrigin)
@@ -88,6 +91,91 @@ func CORSMiddleware(cfg *config.Config) gin.HandlerFunc {
 			return
 		}
 
+		c.Next()
+	}
+}
+
+// RateLimiter provides simple in-memory rate limiting
+type RateLimiter struct {
+	visitors map[string][]time.Time
+	mu       sync.Mutex
+	limit    int
+	window   time.Duration
+}
+
+func NewRateLimiter(limit int, window time.Duration) *RateLimiter {
+	rl := &RateLimiter{
+		visitors: make(map[string][]time.Time),
+		limit:    limit,
+		window:   window,
+	}
+	// Cleanup old entries every 10 minutes
+	go func() {
+		ticker := time.NewTicker(10 * time.Minute)
+		for range ticker.C {
+			rl.mu.Lock()
+			now := time.Now()
+			for ip, times := range rl.visitors {
+				var recent []time.Time
+				for _, t := range times {
+					if now.Sub(t) <= rl.window {
+						recent = append(recent, t)
+					}
+				}
+				if len(recent) == 0 {
+					delete(rl.visitors, ip)
+				} else {
+					rl.visitors[ip] = recent
+				}
+			}
+			rl.mu.Unlock()
+		}
+	}()
+	return rl
+}
+
+func (rl *RateLimiter) Allow(ip string) bool {
+	rl.mu.Lock()
+	defer rl.mu.Unlock()
+
+	now := time.Now()
+	times := rl.visitors[ip]
+
+	var recent []time.Time
+	for _, t := range times {
+		if now.Sub(t) <= rl.window {
+			recent = append(recent, t)
+		}
+	}
+
+	if len(recent) >= rl.limit {
+		rl.visitors[ip] = recent
+		return false
+	}
+
+	recent = append(recent, now)
+	rl.visitors[ip] = recent
+	return true
+}
+
+func RateLimitMiddleware(rl *RateLimiter) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ip := c.ClientIP()
+		if !rl.Allow(ip) {
+			c.JSON(http.StatusTooManyRequests, gin.H{"error": "Too many requests, please try again later"})
+			c.Abort()
+			return
+		}
+		c.Next()
+	}
+}
+
+func SecurityHeadersMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("X-Content-Type-Options", "nosniff")
+		c.Header("X-Frame-Options", "DENY")
+		c.Header("X-XSS-Protection", "1; mode=block")
+		c.Header("Referrer-Policy", "strict-origin-when-cross-origin")
 		c.Next()
 	}
 }

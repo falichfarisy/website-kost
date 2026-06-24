@@ -58,8 +58,14 @@ func main() {
 	ownerBookingHandler := handlers.NewOwnerBookingHandler(bookingService)
 	notificationHandler := handlers.NewNotificationHandler(notificationService)
 
-	r := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
+	r := gin.New()
+	r.Use(gin.Logger(), gin.Recovery())
 	r.Use(middleware.CORSMiddleware(cfg))
+	r.Use(middleware.SecurityHeadersMiddleware())
+	r.MaxMultipartMemory = 8 << 20 // 8MB body limit
+
+	authLimiter := middleware.NewRateLimiter(10, 1*time.Minute)
 
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{"status": "ok"})
@@ -69,9 +75,9 @@ func main() {
 	{
 		auth := api.Group("/auth")
 		{
-			auth.POST("/register", authHandler.Register)
-			auth.POST("/login", authHandler.Login)
-			auth.POST("/refresh", authHandler.Refresh)
+			auth.POST("/register", middleware.RateLimitMiddleware(authLimiter), authHandler.Register)
+			auth.POST("/login", middleware.RateLimitMiddleware(authLimiter), authHandler.Login)
+			auth.POST("/refresh", middleware.RateLimitMiddleware(authLimiter), authHandler.Refresh)
 			auth.GET("/me", middleware.AuthMiddleware(cfg), authHandler.GetMe)
 		}
 
@@ -146,8 +152,11 @@ func main() {
 	cronService.Start()
 
 	srv := &http.Server{
-		Addr:    ":" + cfg.Port,
-		Handler: r,
+		Addr:         ":" + cfg.Port,
+		Handler:      r,
+		ReadTimeout:  15 * time.Second,
+		WriteTimeout: 15 * time.Second,
+		IdleTimeout:  60 * time.Second,
 	}
 
 	go func() {

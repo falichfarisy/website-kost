@@ -29,7 +29,7 @@ func NewAuthHandler(userService *services.UserService, cfg *config.Config) *Auth
 func (h *AuthHandler) Register(c *gin.Context) {
 	var req struct {
 		Email    string `json:"email" binding:"required,email"`
-		Password string `json:"password" binding:"required,min=6"`
+		Password string `json:"password" binding:"required,min=8"`
 		Name     string `json:"name" binding:"required"`
 		Phone    string `json:"phone"`
 	}
@@ -45,7 +45,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), 12)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
 		return
@@ -133,7 +133,13 @@ func (h *AuthHandler) Refresh(c *gin.Context) {
 		return
 	}
 
-	newAccessToken, err := h.generateToken(claims.UserID, claims.Email, claims.Role, h.cfg.JWTSecret, h.cfg.JWTExpiry)
+	user, err := h.userService.GetUserByID(claims.UserID)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
+		return
+	}
+
+	newAccessToken, err := h.generateToken(user.ID, user.Email, string(user.Role), h.cfg.JWTSecret, h.cfg.JWTExpiry)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return
