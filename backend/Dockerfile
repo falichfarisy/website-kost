@@ -20,6 +20,9 @@ WORKDIR /app
 COPY --from=builder /app/kose-server ./
 COPY --from=builder /app/migrations ./migrations
 
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
 EXPOSE 8080
 
 CMD ["./kose-server"]
