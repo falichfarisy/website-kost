@@ -11,11 +11,14 @@ import api from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
 
 const registerSchema = z.object({
-  name: z.string(),
-  email: z.string(),
-  phone: z.string(),
-  password: z.string(),
+  name: z.string().min(2, 'Nama minimal 2 karakter'),
+  email: z.string().email('Email tidak valid'),
+  phone: z.string().optional(),
+  password: z.string().min(8, 'Password minimal 8 karakter'),
   confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: 'Password tidak cocok',
+  path: ['confirmPassword'],
 });
 
 type RegisterForm = z.infer<typeof registerSchema>;
@@ -27,18 +30,21 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterForm>({
-    // resolver: zodResolver(registerSchema),
+    resolver: zodResolver(registerSchema),
   });
 
   const onSubmit = async (data: RegisterForm) => {
     setLoading(true);
     setError('');
     try {
-      const mockUser = { id: 1, email: data.email, name: data.name, role: 'user' as const };
-      const mockToken = 'dummy-access-token';
-      const mockRefreshToken = 'dummy-refresh-token';
-      
-      setAuth(mockUser, mockToken, mockRefreshToken);
+      const res = await api.post('/auth/register', {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        password: data.password,
+      });
+      const { access_token, refresh_token, user } = res.data;
+      setAuth(user, access_token, refresh_token);
       router.push('/');
     } catch (err: any) {
       setError(err.response?.data?.error || 'Registrasi gagal');

@@ -10,10 +10,9 @@ import { Home, Search, MapPin, Star, Building2, AlertCircle, Mail, Lock } from '
 import api from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
 
-// Validation disabled for development
 const loginSchema = z.object({
-  email: z.string(),
-  password: z.string(),
+  email: z.string().email('Email tidak valid'),
+  password: z.string().min(1, 'Password wajib diisi'),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
@@ -25,18 +24,16 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>({
-    // resolver: zodResolver(loginSchema), // Validation disabled
+    resolver: zodResolver(loginSchema),
   });
 
   const onSubmit = async (data: LoginForm) => {
     setLoading(true);
     setError('');
     try {
-      const mockUser = { id: 1, email: data.email, name: 'Test User', role: 'user' as const };
-      const mockToken = 'dummy-access-token';
-      const mockRefreshToken = 'dummy-refresh-token';
-      
-      setAuth(mockUser, mockToken, mockRefreshToken);
+      const res = await api.post('/auth/login', { email: data.email, password: data.password });
+      const { access_token, refresh_token, user } = res.data;
+      setAuth(user, access_token, refresh_token);
       router.push('/');
     } catch (err: any) {
       setError(err.response?.data?.error || 'Login gagal');

@@ -9,188 +9,6 @@ import ResultCard from '@/app/components/ResultCard';
 import Link from 'next/link';
 import { Search, MapPin, Home, Filter, Star } from 'lucide-react';
 
-const MOCK_KOS_DATA: Kos[] = [
-  {
-    id: 1,
-    name: 'Kost Melati Premium',
-    address: 'Jl. Melati No. 123, Yogyakarta',
-    kos_type: 'putra',
-    price: 1500000,
-    price_type: 'bulan',
-    area: '25m²',
-    capacity: 1,
-    available_rooms: 5,
-    latitude: -7.797068,
-    longitude: 110.361528,
-    location: { district: 'Kotabaru' },
-    facilities: [
-      { id: 1, name: 'WiFi', category: 'internet' },
-      { id: 2, name: 'AC', category: 'ac' },
-      { id: 3, name: 'Kamar Mandi Dalam', category: 'kamar_mandi' },
-    ],
-    images: [],
-    rating: 4.5,
-    reviews_count: 23,
-  },
-  {
-    id: 2,
-    name: 'Kost Orchid Indah',
-    address: 'Jl. Orchid No. 45, Yogyakarta',
-    kos_type: 'putri',
-    price: 1200000,
-    price_type: 'bulan',
-    area: '20m²',
-    capacity: 1,
-    available_rooms: 8,
-    latitude: -7.782168,
-    longitude: 110.352628,
-    location: { district: 'Banguntapan' },
-    facilities: [
-      { id: 1, name: 'WiFi', category: 'internet' },
-      { id: 2, name: 'Kamar Mandi Dalam', category: 'kamar_mandi' },
-      { id: 3, name: 'Parkir Motor', category: 'parkir' },
-    ],
-    images: [],
-    rating: 4.2,
-    reviews_count: 15,
-  },
-  {
-    id: 3,
-    name: 'Kost Senja Utama',
-    address: 'Jl. Senja No. 78, Yogyakarta',
-    kos_type: 'campur',
-    price: 900000,
-    price_type: 'bulan',
-    area: '18m²',
-    capacity: 1,
-    available_rooms: 12,
-    latitude: -7.812068,
-    longitude: 110.371528,
-    location: { district: 'Sleman' },
-    facilities: [
-      { id: 1, name: 'WiFi', category: 'internet' },
-      { id: 2, name: 'Dapur', category: 'dapur' },
-    ],
-    images: [],
-    rating: 4.0,
-    reviews_count: 8,
-  },
-  {
-    id: 4,
-    name: 'Kost Emerald Exclusive',
-    address: 'Jl. Emerald No. 9, Yogyakarta',
-    kos_type: 'putra',
-    price: 2000000,
-    price_type: 'bulan',
-    area: '30m²',
-    capacity: 2,
-    available_rooms: 3,
-    latitude: -7.775068,
-    longitude: 110.365528,
-    location: { district: 'Condongcatur' },
-    facilities: [
-      { id: 1, name: 'WiFi', category: 'internet' },
-      { id: 2, name: 'AC', category: 'ac' },
-      { id: 3, name: 'Kamar Mandi Dalam', category: 'kamar_mandi' },
-      { id: 4, name: 'Kulkas', category: 'elektronik' },
-      { id: 5, name: 'TV', category: 'elektronik' },
-    ],
-    images: [],
-    rating: 4.8,
-    reviews_count: 42,
-  },
-  {
-    id: 5,
-    name: 'Kost Sakura Residence',
-    address: 'Jl. Sakura No. 33, Yogyakarta',
-    kos_type: 'putri',
-    price: 1800000,
-    price_type: 'bulan',
-    area: '28m²',
-    capacity: 1,
-    available_rooms: 6,
-    latitude: -7.785068,
-    longitude: 110.345528,
-    location: { district: 'Gedong' },
-    facilities: [
-      { id: 1, name: 'WiFi', category: 'internet' },
-      { id: 2, name: 'AC', category: 'ac' },
-      { id: 3, name: 'Kamar Mandi Dalam', category: 'kamar_mandi' },
-      { id: 4, name: 'Mesin Cuci', category: 'dapur' },
-    ],
-    images: [],
-    rating: 4.6,
-    reviews_count: 31,
-  },
-  {
-    id: 6,
-    name: 'Kost Victory Modern',
-    address: 'Jl. Victory No. 12, Yogyakarta',
-    kos_type: 'putra',
-    price: 1100000,
-    price_type: 'bulan',
-    area: '22m²',
-    capacity: 1,
-    available_rooms: 10,
-    latitude: -7.790068,
-    longitude: 110.355528,
-    location: { district: 'Wirobrajan' },
-    facilities: [
-      { id: 1, name: 'WiFi', category: 'internet' },
-      { id: 2, name: 'Kamar Mandi Dalam', category: 'kamar_mandi' },
-      { id: 3, name: 'Parkir Motor', category: 'parkir' },
-    ],
-    images: [],
-    rating: 4.1,
-    reviews_count: 19,
-  },
-  {
-    id: 7,
-    name: 'Kost Harmony Village',
-    address: 'Jl. Harmony No. 56, Yogyakarta',
-    kos_type: 'campur',
-    price: 750000,
-    price_type: 'bulan',
-    area: '16m²',
-    capacity: 1,
-    available_rooms: 15,
-    latitude: -7.805068,
-    longitude: 110.375528,
-    location: { district: 'Tirunaggal' },
-    facilities: [
-      { id: 1, name: 'WiFi', category: 'internet' },
-      { id: 2, name: 'Dapur', category: 'dapur' },
-      { id: 3, name: 'Parkir Motor', category: 'parkir' },
-    ],
-    images: [],
-    rating: 3.8,
-    reviews_count: 12,
-  },
-  {
-    id: 8,
-    name: 'Kost Blue Pearl',
-    address: 'Jl. Blue Pearl No. 88, Yogyakarta',
-    kos_type: 'putri',
-    price: 1600000,
-    price_type: 'bulan',
-    area: '26m²',
-    capacity: 1,
-    available_rooms: 4,
-    latitude: -7.778068,
-    longitude: 110.360528,
-    location: { district: 'Ngaglik' },
-    facilities: [
-      { id: 1, name: 'WiFi', category: 'internet' },
-      { id: 2, name: 'AC', category: 'ac' },
-      { id: 3, name: 'Kamar Mandi Dalam', category: 'kamar_mandi' },
-      { id: 4, name: 'Security', category: 'keamanan' },
-    ],
-    images: [],
-    rating: 4.4,
-    reviews_count: 27,
-  },
-];
-
 function SearchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -208,12 +26,11 @@ function SearchContent() {
   const { data, isLoading, error } = useQuery({
     queryKey: ['kos', filters],
     queryFn: () => api.get('/kos', { params: { ...filters, search: filters.search || undefined } }).then(res => res.data),
-    retry: false,
+    retry: 2,
   });
 
-  const kosData = data?.data || MOCK_KOS_DATA;
-  const totalCount = data?.meta?.total || MOCK_KOS_DATA.length;
-  const isUsingMock = !data?.data;
+  const kosData = data?.data || [];
+  const totalCount = data?.meta?.total || 0;
 
   const handleFilterChange = (key: keyof KosFilters, value: any) => {
     setFilters(prev => ({ ...prev, [key]: value || undefined, page: 1 }));
@@ -311,17 +128,13 @@ function SearchContent() {
               <p className="text-gray-600">
                 Ditemukan {totalCount} kos
               </p>
-              {isUsingMock && (
-                <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-                  Data dummy (mode development)
-                </span>
-              )}
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {kosData.map((kos: Kos) => (
                 <Link key={kos.id} href={`/kos/${kos.id}`}>
                   <ResultCard
+                    id={kos.id}
                     category={kos.kos_type}
                     location={kos.location?.district || kos.address}
                     nameKos={kos.name}
@@ -332,15 +145,6 @@ function SearchContent() {
                 </Link>
               ))}
             </div>
-
-            {isUsingMock && (
-              <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
-                <p className="text-sm text-blue-700 dark:text-blue-300">
-                  <strong>Mode Development:</strong> Menampilkan data dummy karena backend tidak tersedia.
-                  Untuk production, pastikan backend running di port yang benar.
-                </p>
-              </div>
-            )}
 
             {data?.meta?.totalPages > 1 && (
               <div className="flex justify-center gap-2 mt-8">
