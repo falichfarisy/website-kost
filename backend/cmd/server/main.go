@@ -78,6 +78,7 @@ func main() {
 			auth.POST("/register", middleware.RateLimitMiddleware(authLimiter), authHandler.Register)
 			auth.POST("/login", middleware.RateLimitMiddleware(authLimiter), authHandler.Login)
 			auth.POST("/refresh", middleware.RateLimitMiddleware(authLimiter), authHandler.Refresh)
+			auth.POST("/logout", authHandler.Logout)
 			auth.GET("/me", middleware.AuthMiddleware(cfg), authHandler.GetMe)
 		}
 
@@ -160,9 +161,18 @@ func main() {
 	}
 
 	go func() {
-		log.Printf("Server starting on port %s", cfg.Port)
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("Failed to start server: %v", err)
+		certFile := os.Getenv("TLS_CERT_FILE")
+		keyFile := os.Getenv("TLS_KEY_FILE")
+		if certFile != "" && keyFile != "" {
+			log.Printf("Server starting on port %s with TLS", cfg.Port)
+			if err := srv.ListenAndServeTLS(certFile, keyFile); err != nil && err != http.ErrServerClosed {
+				log.Fatalf("Failed to start TLS server: %v", err)
+			}
+		} else {
+			log.Printf("Server starting on port %s (plain HTTP)", cfg.Port)
+			if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+				log.Fatalf("Failed to start server: %v", err)
+			}
 		}
 	}()
 
