@@ -3,6 +3,26 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { useThemeStore } from '@/lib/theme-store';
+import { useAuthStore } from '@/lib/store';
+import api from '@/lib/api';
+
+function AuthValidator({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, logout } = useAuthStore();
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    let cancelled = false;
+
+    api.get('/auth/me')
+      .catch(() => {
+        if (!cancelled) logout();
+      });
+
+    return () => { cancelled = true; };
+  }, [isAuthenticated, logout]);
+
+  return <>{children}</>;
+}
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({
@@ -23,7 +43,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
+      <AuthValidator>
+        {children}
+      </AuthValidator>
     </QueryClientProvider>
   );
 }
