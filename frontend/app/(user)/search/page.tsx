@@ -141,6 +141,7 @@ function SearchContent() {
                     facility={kos.facilities?.map(f => f.name) || []}
                     price={kos.price}
                     slotRoom={kos.available_rooms}
+                    rating={kos.rating}
                   />
                 </Link>
               ))}
