@@ -3,6 +3,7 @@
 import { useState, useRef, useSyncExternalStore } from "react";
 import Headers from "@/app/components/Headers";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { ChevronRight, Star, MapPin, Building2, Home, Users, Heart, Shield } from "lucide-react";
 
@@ -49,6 +50,7 @@ function formatPrice(price: number): string {
 }
 
 export default function HomePage() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [kosType, setKosType] = useState("all");
   const [priceRange, setPriceRange] = useState("all");
@@ -66,7 +68,7 @@ export default function HomePage() {
     if (searchQuery) params.set("search", searchQuery);
     if (kosType !== "all") params.set("type", kosType);
     if (priceRange !== "all") params.set("price", priceRange);
-    window.location.href = `/search?${params.toString()}`;
+    router.push(`/search?${params.toString()}`);
   };
 
   const isHydrated = useHydration();
