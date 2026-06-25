@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import api from '@/lib/api';
 import { Kos } from '@/lib/types';
@@ -22,6 +22,10 @@ export default function FavoritesPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchFavorites();
+  }, []);
 
   const removeFavorite = async (kosId: number) => {
     setRemoving(kosId);
