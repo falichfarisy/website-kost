@@ -8,16 +8,21 @@ export function PWAProvider() {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').then(
           (registration) => {
-            console.log('SW registered:', registration.scope);
+            if (process.env.NODE_ENV === 'development') {
+              console.log('SW registered:', registration.scope);
+            }
           },
           (error) => {
-            console.log('SW registration failed:', error);
+            if (process.env.NODE_ENV === 'development') {
+              console.log('SW registration failed:', error);
+            }
           }
         );
       });
     }
 
-    if ('standalone' in window.navigator && (window.navigator as any).standalone) {
+    const nav = window.navigator as Navigator & { standalone?: boolean };
+    if ('standalone' in nav && nav.standalone) {
       document.body.classList.add('standalone');
     }
   }, []);
