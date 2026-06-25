@@ -6,12 +6,12 @@ type ResultProps = {
   category: "putra" | "putri" | "campur";
   location: string;
   nameKos: string;
-  fasility: string[];
+  facility: string[];
   price: number;
   slotRoom: number;
 };
 
-export default function ResultCard({ id, category, location, nameKos, fasility, price, slotRoom }: ResultProps) {
+export default function ResultCard({ id, category, location, nameKos, facility, price, slotRoom }: ResultProps) {
   const upperLocation = location.toUpperCase();
   const priceNominal = "Rp" + price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
@@ -60,14 +60,14 @@ export default function ResultCard({ id, category, location, nameKos, fasility, 
           </div>
           
           <div className="flex flex-wrap gap-1">
-            {fasility.slice(0, 3).map((fas, index) => (
+            {facility.slice(0, 3).map((fas, index) => (
               <span key={index} className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
                 {fas}
               </span>
             ))}
-            {fasility.length > 3 && (
+            {facility.length > 3 && (
               <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                +{fasility.length - 3}
+                +{facility.length - 3}
               </span>
             )}
           </div>

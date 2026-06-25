@@ -90,7 +90,7 @@ export default function FavoritesPage() {
                       category={kos.kos_type}
                       location={kos.location?.district || kos.address}
                       nameKos={kos.name}
-                      fasility={kos.facilities?.map(f => f.name) || []}
+                      facility={kos.facilities?.map(f => f.name) || []}
                       price={kos.price}
                       slotRoom={kos.available_rooms}
                     />
