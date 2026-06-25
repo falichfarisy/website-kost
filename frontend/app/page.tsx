@@ -6,37 +6,23 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { ChevronRight, Star, MapPin, Building2, Home, Users, Heart, Shield } from "lucide-react";
+import { featuredKos, allKos, categories as categoryData } from '@/lib/data';
 
-const featuredKos = [
-  { id: 1, name: "Kost Mahkota Regency", location: "Malang - Signature", price: 1200000, rating: 4.8, reviews: 124, type: "Putra", badge: "Terpopuler" },
-  { id: 2, name: "Kost Alam Hijau", location: "Surabaya - Wonokromo", price: 950000, rating: 4.6, reviews: 89, type: "Putri", badge: "Promo" },
-  { id: 3, name: "Kost Melati Square", location: "Jakarta - Tebet", price: 1800000, rating: 4.9, reviews: 256, type: "Campuran", badge: "Best Rated" },
-  { id: 4, name: "Kost Platinum Residence", location: "Bandung - Dago", price: 1500000, rating: 4.7, reviews: 167, type: "Putra" },
-  { id: 5, name: "Kost Senja Timur", location: "Yogyakarta - Sleman", price: 800000, rating: 4.5, reviews: 78, type: "Putri", badge: "Baru" },
-  { id: 6, name: "Kost Nusantara", location: "Semarang - Candisari", price: 1100000, rating: 4.6, reviews: 134, type: "Campuran" },
-];
+const iconMap: Record<string, React.ReactNode> = {
+  putra: <Users className="w-8 h-8" />,
+  putri: <Heart className="w-8 h-8" />,
+  campuran: <Users className="w-8 h-8" />,
+  premium: <Shield className="w-8 h-8" />,
+  motor: <Building2 className="w-8 h-8" />,
+  mobil: <Home className="w-8 h-8" />,
+};
 
-const allKos = [
-  { id: 1, name: "Kost Mahkota Regency", location: "Malang - Signature", price: 1200000, rating: 4.8, reviews: 124, type: "Putra", badge: "Terpopuler", image: null },
-  { id: 2, name: "Kost Alam Hijau", location: "Surabaya - Wonokromo", price: 950000, rating: 4.6, reviews: 89, type: "Putri", badge: "Promo", image: null },
-  { id: 3, name: "Kost Melati Square", location: "Jakarta - Tebet", price: 1800000, rating: 4.9, reviews: 256, type: "Campuran", badge: "Best Rated", image: null },
-  { id: 4, name: "Kost Platinum Residence", location: "Bandung - Dago", price: 1500000, rating: 4.7, reviews: 167, type: "Putra", image: null },
-  { id: 5, name: "Kost Senja Timur", location: "Yogyakarta - Sleman", price: 800000, rating: 4.5, reviews: 78, type: "Putri", badge: "Baru", image: null },
-  { id: 6, name: "Kost Nusantara", location: "Semarang - Candisari", price: 1100000, rating: 4.6, reviews: 134, type: "Campuran", image: null },
-  { id: 7, name: "Kost Indigo Residence", location: "Surabaya - Gubeng", price: 1350000, rating: 4.7, reviews: 98, type: "Putra", image: null },
-  { id: 8, name: "Kost Permata Hijau", location: "Jakarta - Kemang", price: 2200000, rating: 4.9, reviews: 187, type: "Campuran", badge: "Premium", image: null },
-];
+const categories = categoryData.map((cat) => ({
+  ...cat,
+  icon: iconMap[cat.id] || <Building2 className="w-8 h-8" />,
+}));
 
-const categories = [
-  { id: "putra", name: "Putra", icon: <Users className="w-8 h-8" />, count: 450, color: "bg-blue-100 text-blue-600" },
-  { id: "putri", name: "Putri", icon: <Heart className="w-8 h-8" />, count: 380, color: "bg-pink-100 text-pink-600" },
-  { id: "campuran", name: "Campuran", icon: <Users className="w-8 h-8" />, count: 170, color: "bg-purple-100 text-purple-600" },
-  { id: "premium", name: "Premium", icon: <Shield className="w-8 h-8" />, count: 85, color: "bg-amber-100 text-amber-600" },
-  { id: "motor", name: "Parkir Motor", icon: <Building2 className="w-8 h-8" />, count: 620, color: "bg-green-100 text-green-600" },
-  { id: "mobil", name: "Parkir Mobil", icon: <Home className="w-8 h-8" />, count: 290, color: "bg-indigo-100 text-indigo-600" },
-];
-
-function formatPrice(price: number): string {
+const formatPrice = (price: number): string => {
   if (price >= 1000000) return `${(price / 1000000).toFixed(1)}jt`;
   return `${(price / 1000).toFixed(0)}rb`;
 }
