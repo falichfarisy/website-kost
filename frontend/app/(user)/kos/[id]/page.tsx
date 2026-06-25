@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/api';
-import { Kos, Review, Facility } from '@/lib/types';
+import { Kos, Review, Facility, KosImage } from '@/lib/types';
 import { useAuthStore } from '@/lib/store';
 import { useChatStore } from '@/lib/chat-store';
 import { Heart, Star, MapPin, MessageCircle, CheckCircle, Share2, ChevronLeft, ChevronRight, Calendar, Lightbulb } from 'lucide-react';
@@ -16,7 +16,7 @@ export default function KosDetailPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null);
+  const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const { isAuthenticated, logout } = useAuthStore();
   const { openChat } = useChatStore();
   const [showReviewForm, setShowReviewForm] = useState(false);
@@ -137,7 +137,7 @@ export default function KosDetailPage() {
                       <ChevronRight className="w-5 h-5" />
                     </button>
                     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                      {kos.images.map((_: any, i: number) => (
+                      {kos.images.map((image: KosImage, i: number) => (
                         <button
                           key={i}
                           onClick={() => setCurrentImageIndex(i)}
