@@ -24,6 +24,14 @@ export default function KosDetailPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isFavorited, setIsFavorited] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [bookingError, setBookingError] = useState('');
+
+  useEffect(() => {
+    if (bookingError) {
+      const timer = setTimeout(() => setBookingError(''), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [bookingError]);
 
   const { data: kos, isLoading: kosLoading } = useQuery({
     queryKey: ['kos', params.id],
@@ -353,7 +361,7 @@ export default function KosDetailPage() {
                       return;
                     }
                     if (kos.available_rooms <= 0) {
-                      alert('Maaf, kamar tidak tersedia');
+                      setBookingError('Maaf, kamar tidak tersedia');
                       return;
                     }
                     setShowBookingModal(true);
@@ -388,6 +396,12 @@ export default function KosDetailPage() {
         </div>
       </div>
 
+      {bookingError && (
+        <div className="fixed top-4 right-4 z-50 bg-red-500 text-white px-6 py-3 rounded-xl shadow-lg animate-slide-in-right">
+          {bookingError}
+          <button onClick={() => setBookingError('')} className="ml-3 text-white/80 hover:text-white">&times;</button>
+        </div>
+      )}
       <BookingModal
         isOpen={showBookingModal}
         onClose={() => setShowBookingModal(false)}
