@@ -1,18 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect, useSyncExternalStore } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/store";
 import { ChevronRight, Star, MapPin, Building2, Users, Heart, Shield, User, LogOut, Search, BookOpen, Calendar } from "lucide-react";
 import Link from "next/link";
-
-function useHydration() {
-  return useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false
-  );
-}
 
 const featuredKos = [
   { id: 1, name: "Kost Mahkota Regency", location: "Malang - Signature", price: 1200000, rating: 4.8, reviews: 124, type: "Putra", badge: "Terpopuler" },
@@ -42,9 +34,13 @@ export default function UserHomePage() {
   const [priceRange, setPriceRange] = useState("all");
   const featuredScrollRef = useRef<HTMLDivElement>(null);
   const { user, isAuthenticated, logout } = useAuthStore();
-  const isHydrated = useHydration();
+  const [mounted, setMounted] = useState(false);
 
-  if (!isHydrated) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   const handleLogout = () => {
     logout();
