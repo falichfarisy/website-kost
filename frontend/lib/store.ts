@@ -12,6 +12,8 @@ interface User {
 
 interface AuthState {
   user: User | null;
+  accessToken: string | null;
+  refreshToken: string | null;
   isAuthenticated: boolean;
   setAuth: (user: User, accessToken: string, refreshToken: string) => void;
   logout: () => void;
@@ -22,19 +24,19 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
+      accessToken: null,
+      refreshToken: null,
       isAuthenticated: false,
       setAuth: (user, accessToken, refreshToken) => {
-        const hasValidToken = Boolean(accessToken && accessToken.length > 0);
         localStorage.setItem('access_token', accessToken);
         localStorage.setItem('refresh_token', refreshToken);
-        set({ user, isAuthenticated: hasValidToken });
+        set({ user, accessToken, refreshToken, isAuthenticated: true });
       },
       logout: () => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
-        // Clear httpOnly cookies via API call
         fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
-        set({ user: null, isAuthenticated: false });
+        set({ user: null, accessToken: null, refreshToken: null, isAuthenticated: false });
       },
       setRole: (role: 'user' | 'admin' | 'owner') => {
         const roleNames = { user: 'Test User', admin: 'Admin User', owner: 'Owner User' };
@@ -47,6 +49,8 @@ export const useAuthStore = create<AuthState>()(
       name: 'auth-storage',
       partialize: (state) => ({
         user: state.user,
+        accessToken: state.accessToken,
+        refreshToken: state.refreshToken,
         isAuthenticated: state.isAuthenticated,
       }),
     }
