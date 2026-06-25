@@ -23,6 +23,27 @@ func NewAdminHandler(kosService *services.KosService, userService *services.User
 	}
 }
 
+func (h *AdminHandler) GetAllKos(c *gin.Context) {
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "20"))
+
+	kosList, total, err := h.kosService.GetAllKosAdmin(page, limit)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch kos"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": kosList,
+		"meta": gin.H{
+			"page":       page,
+			"limit":      limit,
+			"total":      total,
+			"totalPages": (int(total) + limit - 1) / limit,
+		},
+	})
+}
+
 func (h *AdminHandler) CreateKos(c *gin.Context) {
 	var req struct {
 		Name           string  `json:"name" binding:"required"`
