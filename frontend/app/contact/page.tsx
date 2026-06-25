@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import { useRouter } from "next/navigation";
 import Headers from "@/app/components/Headers";
+import api from '@/lib/api';
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react";
 
 export default function ContactPage() {
@@ -20,10 +21,14 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setLoading(false);
-    setSubmitted(true);
-    setFormData({ name: '', email: '', subject: '', message: '' });
+    try {
+      await api.post('/contact', formData);
+      setSubmitted(true);
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (err) {
+    } finally {
+      setLoading(false);
+    }
   };
 
   const contactInfo = [
