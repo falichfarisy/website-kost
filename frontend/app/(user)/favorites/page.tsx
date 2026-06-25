@@ -5,19 +5,21 @@ import Link from 'next/link';
 import api from '@/lib/api';
 import { Kos } from '@/lib/types';
 import ResultCard from '@/app/components/ResultCard';
-import { Heart, Search } from 'lucide-react';
+import { Heart, Search, AlertCircle } from 'lucide-react';
 
 export default function FavoritesPage() {
   const [favorites, setFavorites] = useState<Kos[]>([]);
   const [loading, setLoading] = useState(true);
   const [removing, setRemoving] = useState<number | null>(null);
+  const [error, setError] = useState('');
 
   const fetchFavorites = async () => {
     try {
       const response = await api.get('/favorites');
       setFavorites(response.data.data || []);
+      setError('');
     } catch (error) {
-      console.error('Error fetching favorites:', error);
+      setError('Gagal memuat data favorit. Silakan coba lagi.');
     } finally {
       setLoading(false);
     }
@@ -33,7 +35,7 @@ export default function FavoritesPage() {
       await api.delete(`/favorites/${kosId}`);
       setFavorites(prev => prev.filter(k => k.id !== kosId));
     } catch (error) {
-      console.error('Error removing favorite:', error);
+      setError('Gagal menghapus favorit. Silakan coba lagi.');
     } finally {
       setRemoving(null);
     }
@@ -52,6 +54,13 @@ export default function FavoritesPage() {
       </div>
 
       <div className="max-w-7xl mx-auto p-4 md:p-8">
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-2">
+            <AlertCircle className="w-5 h-5" />
+            {error}
+            <button onClick={() => setError('')} className="ml-auto text-red-500 hover:text-red-700">&times;</button>
+          </div>
+        )}
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#011E55]"></div>
