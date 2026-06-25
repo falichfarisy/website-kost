@@ -1,19 +1,11 @@
 "use client";
 
-import { useState, useRef, useSyncExternalStore } from "react";
+import { useState, useRef, useEffect } from "react";
 import Headers from "@/app/components/Headers";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { ChevronRight, Star, MapPin, Building2, Home, Users, Heart, Shield } from "lucide-react";
-
-function useHydration() {
-  return useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false
-  );
-}
 
 const featuredKos = [
   { id: 1, name: "Kost Mahkota Regency", location: "Malang - Signature", price: 1200000, rating: 4.8, reviews: 124, type: "Putra", badge: "Terpopuler" },
@@ -51,10 +43,15 @@ function formatPrice(price: number): string {
 
 export default function HomePage() {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [kosType, setKosType] = useState("all");
   const [priceRange, setPriceRange] = useState("all");
   const featuredScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const featuredScroll = (direction: "left" | "right") => {
     if (featuredScrollRef.current) {
@@ -71,11 +68,9 @@ export default function HomePage() {
     router.push(`/search?${params.toString()}`);
   };
 
-  const isHydrated = useHydration();
-
-  if (!isHydrated) {
+  if (!mounted) {
     return null;
-}
+  }
 
   return (
     <div className="min-h-screen flex flex-col w-full bg-gray-50">
