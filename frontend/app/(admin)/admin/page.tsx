@@ -1,10 +1,16 @@
 'use client';
 
 import { useAuthStore } from '@/lib/store';
+import { useQuery } from '@tanstack/react-query';
+import api from '@/lib/api';
 import { Users, ClipboardList, UserCog, Settings, Plus, Building2 } from 'lucide-react';
 
 export default function AdminDashboardPage() {
   const { user, logout } = useAuthStore();
+  const { data: stats } = useQuery({
+    queryKey: ['admin', 'stats'],
+    queryFn: () => api.get('/admin/stats').then((r) => r.data),
+  });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -27,19 +33,19 @@ export default function AdminDashboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-xl shadow p-6">
             <h3 className="text-gray-600 text-sm">Total Kos</h3>
-            <p className="text-3xl font-bold text-[#011E55]">0</p>
+            <p className="text-3xl font-bold text-[#011E55]">{stats?.total_kos ?? 0}</p>
           </div>
           <div className="bg-white rounded-xl shadow p-6">
             <h3 className="text-gray-600 text-sm">Total User</h3>
-            <p className="text-3xl font-bold text-[#011E55]">0</p>
+            <p className="text-3xl font-bold text-[#011E55]">{stats?.total_users ?? 0}</p>
           </div>
           <div className="bg-white rounded-xl shadow p-6">
             <h3 className="text-gray-600 text-sm">Total Ulasan</h3>
-            <p className="text-3xl font-bold text-[#011E55]">0</p>
+            <p className="text-3xl font-bold text-[#011E55]">{stats?.total_reviews ?? 0}</p>
           </div>
           <div className="bg-white rounded-xl shadow p-6">
             <h3 className="text-gray-600 text-sm">Kos Aktif</h3>
-            <p className="text-3xl font-bold text-[#011E55]">0</p>
+            <p className="text-3xl font-bold text-[#011E55]">{stats?.active_kos ?? 0}</p>
           </div>
         </div>
 
