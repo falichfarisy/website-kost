@@ -40,24 +40,13 @@ self.addEventListener('fetch', (event) => {
     (async () => {
       const cache = await caches.open(CACHE_NAME);
       
-      if (navigator.onLine) {
-        try {
-          const networkResponse = await fetch(event.request);
-          if (networkResponse.ok) {
-            cache.put(event.request, networkResponse.clone());
-          }
-          return networkResponse;
-        } catch (error) {
-          const cachedResponse = await cache.match(event.request);
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          if (event.request.mode === 'navigate') {
-            return caches.match(OFFLINE_URL);
-          }
-          return new Response('Offline', { status: 503 });
+      try {
+        const networkResponse = await fetch(event.request);
+        if (networkResponse.ok) {
+          cache.put(event.request, networkResponse.clone());
         }
-      } else {
+        return networkResponse;
+      } catch (error) {
         const cachedResponse = await cache.match(event.request);
         if (cachedResponse) {
           return cachedResponse;
