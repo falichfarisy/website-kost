@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { UserPlus, Home, Heart, FileText, Bell, ShieldCheck, AlertCircle, User, Mail, Phone, Lock, CheckCircle } from 'lucide-react';
 import api from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
+import { AxiosError } from 'axios';
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Nama minimal 2 karakter'),
@@ -46,8 +47,8 @@ export default function RegisterPage() {
       const { access_token, refresh_token, user } = res.data;
       setAuth(user, access_token, refresh_token);
       router.push('/');
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Registrasi gagal');
+    } catch (err: unknown) {
+      setError(err instanceof AxiosError ? (err.response?.data?.error || 'Registrasi gagal') : 'Registrasi gagal');
     } finally {
       setLoading(false);
     }

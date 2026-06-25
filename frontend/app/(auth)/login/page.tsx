@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { Home, Search, MapPin, Star, Building2, AlertCircle, Mail, Lock } from 'lucide-react';
 import api from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
+import { AxiosError } from 'axios';
 
 const loginSchema = z.object({
   email: z.string().email('Email tidak valid'),
@@ -35,8 +36,8 @@ export default function LoginPage() {
       const { access_token, refresh_token, user } = res.data;
       setAuth(user, access_token, refresh_token);
       router.push('/');
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Login gagal');
+    } catch (err: unknown) {
+      setError(err instanceof AxiosError ? (err.response?.data?.error || 'Login gagal') : 'Login gagal');
     } finally {
       setLoading(false);
     }
