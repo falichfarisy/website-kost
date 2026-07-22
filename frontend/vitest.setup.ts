@@ -1,6 +1,8 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
+global.jest = vi;
+
 window.matchMedia = vi.fn().mockImplementation((query) => ({
   matches: false,
   media: query,
